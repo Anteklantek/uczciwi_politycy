@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="Uczciwi_politycy"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/home/antq/ClionProjects/Uczciwi_politycy/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/antq/ClionProjects/Uczciwi_politycy/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/antq/ClionProjects/Uczciwi_politycy/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/antq/ClionProjects/Uczciwi_politycy/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/antq/ClionProjects/Uczciwi_politycy/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/home/antq/ClionProjects/Uczciwi_politycy/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/antq/ClionProjects/Uczciwi_politycy/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/antq/ClionProjects/Uczciwi_politycy/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/antq/ClionProjects/Uczciwi_politycy/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/antq/ClionProjects/Uczciwi_politycy/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/home/antq/ClionProjects/Uczciwi_politycy/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/antq/ClionProjects/Uczciwi_politycy/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/antq/ClionProjects/Uczciwi_politycy/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/antq/ClionProjects/Uczciwi_politycy/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/antq/ClionProjects/Uczciwi_politycy/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Uczciwi_politycy">
+				<Option output="/home/antq/ClionProjects/Uczciwi_politycy/cmake-build-debug/Uczciwi_politycy" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/antq/ClionProjects/Uczciwi_politycy/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/include/mpich"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/4.9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/4.9/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/antq/ClionProjects/Uczciwi_politycy/cmake-build-debug/Makefile&quot;  VERBOSE=1 Uczciwi_politycy"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/antq/ClionProjects/Uczciwi_politycy/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/antq/ClionProjects/Uczciwi_politycy/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/antq/ClionProjects/Uczciwi_politycy/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Uczciwi_politycy/fast">
+				<Option output="/home/antq/ClionProjects/Uczciwi_politycy/cmake-build-debug/Uczciwi_politycy" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/antq/ClionProjects/Uczciwi_politycy/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/include/mpich"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/4.9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/4.9/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/antq/ClionProjects/Uczciwi_politycy/cmake-build-debug/Makefile&quot;  VERBOSE=1 Uczciwi_politycy/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/antq/ClionProjects/Uczciwi_politycy/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/antq/ClionProjects/Uczciwi_politycy/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/antq/ClionProjects/Uczciwi_politycy/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/home/antq/ClionProjects/Uczciwi_politycy/main.c">
+			<Option target="Uczciwi_politycy"/>
+		</Unit>
+		<Unit filename="/home/antq/ClionProjects/Uczciwi_politycy/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

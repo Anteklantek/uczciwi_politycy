@@ -1,0 +1,1 @@
+mpicc  -pthread -g   CMakeFiles/Uczciwi_politycy.dir/main.c.o  -o Uczciwi_politycy 
