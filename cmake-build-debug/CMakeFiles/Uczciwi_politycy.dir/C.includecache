@@ -7,9 +7,15 @@
 #IncludeRegexTransform: 
 
 /home/antq/ClionProjects/Uczciwi_politycy/main.c
-mpi.h
+pthread.h
 -
 stdio.h
+-
+stdlib.h
+-
+mpi.h
+-
+zconf.h
 -
 
 /usr/include/mpich/mpi.h

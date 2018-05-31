@@ -9,5 +9,5 @@ set(CMAKE_C_COMPILER mpicc)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -pthread")
 
 
-set(SOURCE_FILES main.c)
+set(SOURCE_FILES main.cpp)
 add_executable(Uczciwi_politycy ${SOURCE_FILES})
