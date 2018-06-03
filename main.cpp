@@ -30,7 +30,7 @@ struct queue_element *queue;
 int world_size;
 int process_rank;
 pthread_t odbieraj_acki_thread, odbieraj_zadania_thread, odbieraj_release_thread;
-pthread_mutex_t lamport_lock, printf_lock, queue_lock;
+pthread_mutex_t lamport_lock, printf_lock, queue_lock, starsza_lock;
 
 int get_index_of_last_elem();
 
@@ -118,7 +118,9 @@ void *odbieraj_acki(void *arg)
         pthread_mutex_unlock(&printf_lock);
 
         if(dane_odbierane[1] > lamport_zadania){
+            pthread_mutex_lock(&starsza_lock);
             starsza_wiadomosc[dane_odbierane[0]] = 1;
+            pthread_mutex_unlock(&starsza_lock);
         }
 
     }
@@ -165,10 +167,23 @@ void *odbieraj_zadania(void *arg)
 }
 
 void *odbieraj_release(void *arg) {
-    int dane_odbierane[2];
+    int released_process_rank;
     while (1) {
-        MPI_Recv(&dane_odbierane, 2, MPI_INT, MPI_ANY_SOURCE, RELEASE, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-        delete_from_queue(dane_odbierane[0]);
+        MPI_Recv(&released_process_rank, 2, MPI_INT, MPI_ANY_SOURCE, RELEASE, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+
+        pthread_mutex_lock(&printf_lock);
+        printf("(proc %d, lamport %d) odebrał release od proc %d\n", process_rank, lamport, released_process_rank);
+        fflush(stdout);
+        pthread_mutex_unlock(&printf_lock);
+
+        delete_from_queue(released_process_rank);
+
+        pthread_mutex_lock(&printf_lock);
+        print_kolejka();
+        fflush(stdout);
+        pthread_mutex_unlock(&printf_lock);
+
+
     }
 }
 
@@ -233,6 +248,7 @@ int main()
 
 
         while(1) {
+
             for( int i = 0; i < world_size; i++) {
                 starsza_wiadomosc[i] = 0;
             }
@@ -249,41 +265,49 @@ int main()
                     continue;
                 }
                 MPI_Send(&dane_wysylane, 2, MPI_INT, i, ADD_TO_QUEUE, MPI_COMM_WORLD);
+
                 pthread_mutex_lock(&printf_lock);
                 printf("(proc %d, lamport %d) wyslal żądanie do proc %d z lamportem %d\n", process_rank, lamport, i, dane_wysylane[1]);
                 fflush(stdout);
                 pthread_mutex_unlock(&printf_lock);
+
                 lamport += 1;
             }
 
             while(1){
-                if( (sumuj_tablice(starsza_wiadomosc) == world_size -1) && (queue[0].process_rank == process_rank)){
+                pthread_mutex_lock(&queue_lock);
+                if( (sumuj_tablice(starsza_wiadomosc) == world_size - 1) && (queue[0].process_rank == process_rank)){
                     pthread_mutex_lock(&printf_lock);
-                    printf("(proc %d, lamport %d) first in queue process rank: %d\n",process_rank, lamport, queue[0].process_rank);
+                    printf("(proc %d, lamport %d) rank pierwszego procesu w kolejce: %d\n",process_rank, lamport, queue[0].process_rank);
                     print_kolejka();
                     printf("(proc %d, lamport %d) SEKCJA KRYTYCZNA\n", process_rank, lamport);
-                    //printf("%d %d\n",queue[0].process_rank,process_rank);
                     print_kolejka();
-                    //printf("%d %d\n",queue[0].process_rank,process_rank);
                     print_starsze();
                     fflush(stdout);
                     pthread_mutex_unlock(&printf_lock);
                     break;
-                } else{
-
+                }
+                pthread_mutex_unlock(&queue_lock);
+                for(int wait = 0; wait < 3600000; wait++){
+                    wait+=1;
                 }
             }
 
-            sleep(2);
+            for(int wait2 = 0; wait2 < 3600000; wait2++){
+                wait2+=1;
+            }
+
             pthread_mutex_lock(&printf_lock);
             printf("(proc %d, lamport %d) KONIEC SEKCJI KRYTYCZNEJ .\n", process_rank, lamport);
             fflush(stdout);
             pthread_mutex_unlock(&printf_lock);
 
-
-            int release;
             for(int i = 0; i < world_size; i++){
-                MPI_Send(&release, 1, MPI_INT, i, RELEASE, MPI_COMM_WORLD);
+                if(process_rank == i){
+                    delete_from_queue(i);
+                    continue;
+                }
+                MPI_Send(&process_rank, 1, MPI_INT, i, RELEASE, MPI_COMM_WORLD);
             }
         }
 
