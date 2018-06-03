@@ -34,8 +34,8 @@
       <file leaf-file-name="main.cpp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="647">
-              <caret line="342" selection-start-line="342" selection-end-line="342" />
+            <state relative-caret-position="595">
+              <caret line="50" column="23" lean-forward="true" selection-start-line="50" selection-start-column="23" selection-end-line="50" selection-end-column="23" />
             </state>
           </provider>
         </entry>
@@ -50,6 +50,7 @@
       <find>fflush</find>
       <find>maxy</find>
       <find>starsza_wiadomosc</find>
+      <find>wysłał</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -148,12 +149,12 @@
       <workItem from="1528022636745" duration="3081000" />
       <workItem from="1528044027210" duration="1221000" />
       <workItem from="1528046220186" duration="2511000" />
-      <workItem from="1528060129399" duration="1522000" />
+      <workItem from="1528060129399" duration="1934000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="24155000" />
+    <option name="totallyTimeSpent" value="24567000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1096" extended-state="6" />
@@ -318,8 +319,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/main.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="647">
-          <caret line="342" selection-start-line="342" selection-end-line="342" />
+        <state relative-caret-position="595">
+          <caret line="50" column="23" lean-forward="true" selection-start-line="50" selection-start-column="23" selection-end-line="50" selection-end-column="23" />
         </state>
       </provider>
     </entry>
