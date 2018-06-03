@@ -30,13 +30,14 @@ struct queue_element *queue;
 int world_size;
 int process_rank;
 pthread_t odbieraj_acki_thread, odbieraj_zadania_thread, odbieraj_release_thread;
+pthread_mutex_t lamport_lock, printf_lock, queue_lock;
 
 int get_index_of_last_elem();
 
 int get_index_of_given_process_rank(int process_rank);
 
 void insert_into_queue(struct queue_element element_to_insert) {
-
+    pthread_mutex_lock(&queue_lock);
     for(int i = 0; i< world_size; i++){
         if(queue[i].process_rank == -1){
             queue[i].process_rank = element_to_insert.process_rank;
@@ -53,7 +54,7 @@ void insert_into_queue(struct queue_element element_to_insert) {
             break;
         }
     }
-
+    pthread_mutex_unlock(&queue_lock);
 }
 
 int get_index_of_last_elem(){
@@ -66,11 +67,17 @@ int get_index_of_last_elem(){
 }
 
 void delete_from_queue(int process_rank_to_delete){
+    pthread_mutex_lock(&queue_lock);
 
     int index = get_index_of_given_process_rank(process_rank_to_delete);
     int last_index = get_index_of_last_elem();
     if(index == -1){
-        printf("No such element my_process_rank:%d, to_delete: %d,\n", process_rank, process_rank_to_delete );
+
+        pthread_mutex_lock(&printf_lock);
+        printf("(proc %d, lamport %d) No such element with process rank: %d,\n", process_rank, lamport, process_rank_to_delete );
+        fflush(stdout);
+        pthread_mutex_unlock(&printf_lock);
+
         return;
     }
     for (int i = index ; i < last_index; i++){
@@ -79,6 +86,7 @@ void delete_from_queue(int process_rank_to_delete){
 
     }
     queue[last_index].process_rank = -1;
+    pthread_mutex_unlock(&queue_lock);
 
 }
 
@@ -93,15 +101,22 @@ int get_index_of_given_process_rank(int process_rank){
 
 int sumuj_tablice(int *tab);
 
+void print_kolejka();
+
+void print_starsze();
+
 void *odbieraj_acki(void *arg)
 {
-    if(process_rank == 0){
-        printf("Odbieram acki\n");
-    }
+
     int dane_odbierane[2];
     while(1){
         MPI_Recv(&dane_odbierane, 2, MPI_INT, MPI_ANY_SOURCE, ACKI_CHANNEL, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-        printf("(proc %d, clock %d) odebral od (proc %d, clock %d)\n", process_rank, lamport, dane_odbierane[0], dane_odbierane[1]);
+
+        pthread_mutex_lock(&printf_lock);
+        printf("(proc %d, lamport %d) odebral ACK od proc %d, z lamportem %d\n", process_rank, lamport, dane_odbierane[0], dane_odbierane[1]);
+        fflush(stdout);
+        pthread_mutex_unlock(&printf_lock);
+
         if(dane_odbierane[1] > lamport_zadania){
             starsza_wiadomosc[dane_odbierane[0]] = 1;
         }
@@ -114,24 +129,36 @@ void *odbieraj_acki(void *arg)
 
 void *odbieraj_zadania(void *arg)
 {
-    printf("odbieram żądania \n");
     struct queue_element received;
     int dane_odbierane[2];
     while(1){
         MPI_Recv(&dane_odbierane, 2, MPI_INT, MPI_ANY_SOURCE, ADD_TO_QUEUE, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-        printf("(proc %d, clock %d) odebral od (proc %d, clock %d)\n", process_rank, lamport, dane_odbierane[0], dane_odbierane[1]);
+
+        pthread_mutex_lock(&printf_lock);
+        printf("(proc %d, lamport %d) odebral żądanie od proc %d, z lamportem %d\n", process_rank, lamport, dane_odbierane[0], dane_odbierane[1]);
+        fflush(stdout);
+        pthread_mutex_unlock(&printf_lock);
+
         if(dane_odbierane[1] > lamport_zadania){
             starsza_wiadomosc[dane_odbierane[0]] = 1;
         }
+        pthread_mutex_lock(&lamport_lock);
         lamport = maxy(lamport, dane_odbierane[1]) + 1;
+        pthread_mutex_unlock(&lamport_lock);
         received.process_rank = dane_odbierane[0];
         received.lamport_clock = dane_odbierane[1];
         insert_into_queue(received);
+        print_kolejka();
 
         //wyslij acka w odpowiedzi
         int dane_wysylane[2] =  { process_rank, lamport };
         MPI_Send(&dane_wysylane, 2, MPI_INT, dane_odbierane[0], ACKI_CHANNEL, MPI_COMM_WORLD);
-        printf("(proc %d, clock %d) wyslal ACK do proc %d\n", process_rank, dane_wysylane[0], dane_wysylane[1]);
+
+        pthread_mutex_lock(&printf_lock);
+        printf("(proc %d, lamport %d) wyslal ACK do proc %d z lamportem %d\n", process_rank, lamport, dane_odbierane[0], dane_wysylane[1]);
+        fflush(stdout);
+        pthread_mutex_unlock(&printf_lock);
+
     }
 
     pthread_exit(NULL);
@@ -158,7 +185,7 @@ int initialize(){
     }
 
     MPI_Comm_rank(MPI_COMM_WORLD, &process_rank);
-//    printf("My process rank is: %d\n", process_rank);
+    printf("My process rank is: %d\n", process_rank);
 
     MPI_Comm_size(MPI_COMM_WORLD, &world_size);
 //    printf("World size is: %d\n",world_size);
@@ -173,7 +200,21 @@ int initialize(){
         queue[i].process_rank = -1;
     }
 
-
+    if (pthread_mutex_init(&lamport_lock, NULL) != 0)
+    {
+        printf("\n mutex init failed\n");
+        return 1;
+    }
+    if (pthread_mutex_init(&printf_lock, NULL) != 0)
+    {
+        printf("\n mutex init failed\n");
+        return 1;
+    }
+    if (pthread_mutex_init(&queue_lock, NULL) != 0)
+    {
+        printf("\n mutex init failed\n");
+        return 1;
+    }
 
     return 0;
 }
@@ -208,19 +249,37 @@ int main()
                     continue;
                 }
                 MPI_Send(&dane_wysylane, 2, MPI_INT, i, ADD_TO_QUEUE, MPI_COMM_WORLD);
+                pthread_mutex_lock(&printf_lock);
+                printf("(proc %d, lamport %d) wyslal żądanie do proc %d z lamportem %d\n", process_rank, lamport, i, dane_wysylane[1]);
+                fflush(stdout);
+                pthread_mutex_unlock(&printf_lock);
                 lamport += 1;
             }
 
             while(1){
-                if( sumuj_tablice(starsza_wiadomosc) == world_size -1 && queue[0].process_rank == process_rank){
+                if( (sumuj_tablice(starsza_wiadomosc) == world_size -1) && (queue[0].process_rank == process_rank)){
+                    pthread_mutex_lock(&printf_lock);
+                    printf("(proc %d, lamport %d) first in queue process rank: %d\n",process_rank, lamport, queue[0].process_rank);
+                    print_kolejka();
+                    printf("(proc %d, lamport %d) SEKCJA KRYTYCZNA\n", process_rank, lamport);
+                    //printf("%d %d\n",queue[0].process_rank,process_rank);
+                    print_kolejka();
+                    //printf("%d %d\n",queue[0].process_rank,process_rank);
+                    print_starsze();
+                    fflush(stdout);
+                    pthread_mutex_unlock(&printf_lock);
                     break;
+                } else{
+
                 }
             }
 
-            fflush(stdout);
-            printf("Jestem w sekcji krytycznej, hurra!! Jestem nr: %d\n", process_rank);
             sleep(2);
-            printf("Uciekam z sekcji krytycznej, :((. Jestem nr: %d\n", process_rank);
+            pthread_mutex_lock(&printf_lock);
+            printf("(proc %d, lamport %d) KONIEC SEKCJI KRYTYCZNEJ .\n", process_rank, lamport);
+            fflush(stdout);
+            pthread_mutex_unlock(&printf_lock);
+
 
             int release;
             for(int i = 0; i < world_size; i++){
@@ -233,6 +292,24 @@ int main()
         pthread_exit(NULL);
         return 0;
     }
+}
+
+void print_starsze() {
+    printf("(proc %d, lamport %d) ",process_rank, lamport);
+    printf("starsza_wiadmość [");
+    for(int i=0; i < world_size; i++){
+        printf("%d,", starsza_wiadomosc[i]);
+    }
+    printf("]\n");
+}
+
+void print_kolejka() {
+    printf("(proc %d, lamport %d) ",process_rank, lamport);
+    printf("kolejka [");
+    for(int i=0; i < world_size; i++){
+        printf("%d,", queue[i].process_rank);
+    }
+    printf("]\n");
 }
 
 int sumuj_tablice(int *tab) {

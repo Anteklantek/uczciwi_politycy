@@ -123,32 +123,32 @@ Uczciwi_politycy/fast:
 	$(MAKE) -f CMakeFiles/Uczciwi_politycy.dir/build.make CMakeFiles/Uczciwi_politycy.dir/build
 .PHONY : Uczciwi_politycy/fast
 
-main.o: main.c.o
+main.o: main.cpp.o
 
 .PHONY : main.o
 
 # target to build an object file
-main.c.o:
-	$(MAKE) -f CMakeFiles/Uczciwi_politycy.dir/build.make CMakeFiles/Uczciwi_politycy.dir/main.c.o
-.PHONY : main.c.o
+main.cpp.o:
+	$(MAKE) -f CMakeFiles/Uczciwi_politycy.dir/build.make CMakeFiles/Uczciwi_politycy.dir/main.cpp.o
+.PHONY : main.cpp.o
 
-main.i: main.c.i
+main.i: main.cpp.i
 
 .PHONY : main.i
 
 # target to preprocess a source file
-main.c.i:
-	$(MAKE) -f CMakeFiles/Uczciwi_politycy.dir/build.make CMakeFiles/Uczciwi_politycy.dir/main.c.i
-.PHONY : main.c.i
+main.cpp.i:
+	$(MAKE) -f CMakeFiles/Uczciwi_politycy.dir/build.make CMakeFiles/Uczciwi_politycy.dir/main.cpp.i
+.PHONY : main.cpp.i
 
-main.s: main.c.s
+main.s: main.cpp.s
 
 .PHONY : main.s
 
 # target to generate assembly for a file
-main.c.s:
-	$(MAKE) -f CMakeFiles/Uczciwi_politycy.dir/build.make CMakeFiles/Uczciwi_politycy.dir/main.c.s
-.PHONY : main.c.s
+main.cpp.s:
+	$(MAKE) -f CMakeFiles/Uczciwi_politycy.dir/build.make CMakeFiles/Uczciwi_politycy.dir/main.cpp.s
+.PHONY : main.cpp.s
 
 # Help Target
 help:
