@@ -36,7 +36,7 @@ pthread_mutex_t lamport_lock, printf_lock, queue_lock, starsza_lock;
 
 void print(const char * text){
     pthread_mutex_lock(&printf_lock);
-    printf("(procs: %d, lamport: %d, lamport żądania: %d) ", process_rank, lamport, lamport_zadania);
+    printf("(proc: %d, lamport: %d, lamport żądania: %d) ", process_rank, lamport, lamport_zadania);
     printf("kolejka: [");
     for(int i=0; i < world_size - 1; i++){
         printf("%d, ",queue[i].process_rank);
@@ -56,7 +56,7 @@ void print(const char * text){
 
 void print2(const char * text, int a, int b){
     pthread_mutex_lock(&printf_lock);
-    printf("(procs: %d, lamport: %d, lamport żądania: %d) ", process_rank, lamport, lamport_zadania);
+    printf("(proc: %d, lamport: %d, lamport żądania: %d) ", process_rank, lamport, lamport_zadania);
     printf("kolejka: [");
     for(int i=0; i < world_size - 1; i++){
         printf("%d, ",queue[i].process_rank);
@@ -330,10 +330,7 @@ int main() {
 
             sleep(2);
 
-            pthread_mutex_lock(&printf_lock);
             print("KONIEC SEKCJI KRYTYCZNEJ");
-            fflush(stdout);
-            pthread_mutex_unlock(&printf_lock);
 
             for (int z = 0; z < world_size; z++) {
                 if (process_rank == z) {
@@ -342,11 +339,7 @@ int main() {
                     MPI_Send(&process_rank, 1, MPI_INT, z, RELEASE, MPI_COMM_WORLD);
                 }
             }
-            pthread_mutex_lock(&printf_lock);
             print("koniec cyklu procesu");
-            fflush(stdout);
-            pthread_mutex_unlock(&printf_lock);
-
         }
 
         MPI_Finalize();
