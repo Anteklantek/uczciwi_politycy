@@ -176,6 +176,13 @@ void *odbieraj_release(void *arg) {
         pthread_mutex_unlock(&printf_lock);
 
         delete_from_queue(released_process_rank);
+
+        pthread_mutex_lock(&printf_lock);
+        print_kolejka();
+        fflush(stdout);
+        pthread_mutex_unlock(&printf_lock);
+
+
     }
 }
 
@@ -192,10 +199,10 @@ int initialize(){
     }
 
     MPI_Comm_rank(MPI_COMM_WORLD, &process_rank);
-    //printf("My process rank is: %d\n", process_rank);
+    printf("My process rank is: %d\n", process_rank);
 
     MPI_Comm_size(MPI_COMM_WORLD, &world_size);
-    //printf("World size is: %d\n",world_size);
+    printf("World size is: %d\n",world_size);
 
     starsza_wiadomosc = (int*)malloc(world_size * sizeof(int));
     pthread_mutex_lock(&starsza_lock);
