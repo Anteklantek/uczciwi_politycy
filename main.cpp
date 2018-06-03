@@ -152,7 +152,6 @@ void *odbieraj_zadania(void *arg)
         received.process_rank = dane_odbierane[0];
         received.lamport_clock = dane_odbierane[1];
         insert_into_queue(received);
-        print_kolejka();
 
         //wyslij acka w odpowiedzi
         int dane_wysylane[2] =  { process_rank, lamport };
@@ -297,6 +296,8 @@ int main()
                     fflush(stdout);
                     pthread_mutex_unlock(&printf_lock);
                     break;
+                } else {
+                    printf("(proc %d, lamport %d) szturm na sekcję krytyczną nie udany\n", process_rank, lamport);
                 }
                 pthread_mutex_unlock(&queue_lock);
                 for(int wait = 0; wait < 3600000; wait++){
