@@ -168,7 +168,7 @@ void *odbieraj_acki(void *arg) {
     while (1) {
         MPI_Recv(&dane_odbierane, 2, MPI_INT, MPI_ANY_SOURCE, ACKI_CHANNEL, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
-        printf("odebral ACK od proc %d, z lamportem %d", dane_odbierane[0], dane_odbierane[1]);
+        print2("odebral ACK od proc %d, z lamportem %d", dane_odbierane[0], dane_odbierane[1]);
 
         if (dane_odbierane[1] > lamport_zadania) {
             pthread_mutex_lock(&starsza_lock);
