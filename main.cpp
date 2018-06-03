@@ -36,19 +36,19 @@ pthread_mutex_t lamport_lock, printf_lock, queue_lock, starsza_lock;
 
 void print(const char * text){
     pthread_mutex_lock(&printf_lock);
-    printf("(procs: %d, lamport: %d, lamport żądania:) ", process_rank, lamport, lamport_zadania);
+    printf("(procs: %d, lamport: %d, lamport żądania: %d) ", process_rank, lamport, lamport_zadania);
     printf("kolejka: [");
     for(int i=0; i < world_size - 1; i++){
-        printf("%d, ",queue[i]);
+        printf("%d, ",queue[i].process_rank);
     }
-    printf("%d] ", queue[world_size-1]);
+    printf("%d] ", queue[world_size-1].process_rank);
 
     printf("starsza: [");
     for(int i=0; i < world_size - 1; i++){
         printf("%d, ",starsza_wiadomosc[i]);
     }
     printf("%d] ", starsza_wiadomosc[world_size-1]);
-    printf(text);
+    printf("%s",text);
     printf("\n");
     fflush(stdout);
     pthread_mutex_unlock(&printf_lock);
@@ -56,12 +56,12 @@ void print(const char * text){
 
 void print2(const char * text, int a, int b){
     pthread_mutex_lock(&printf_lock);
-    printf("(procs: %d, lamport: %d, lamport żądania:) ", process_rank, lamport, lamport_zadania);
+    printf("(procs: %d, lamport: %d, lamport żądania: %d) ", process_rank, lamport, lamport_zadania);
     printf("kolejka: [");
     for(int i=0; i < world_size - 1; i++){
-        printf("%d, ",queue[i]);
+        printf("%d, ",queue[i].process_rank);
     }
-    printf("%d] ", queue[world_size-1]);
+    printf("%d] ", queue[world_size-1].process_rank);
 
     printf("starsza: [");
     for(int i=0; i < world_size - 1; i++){
