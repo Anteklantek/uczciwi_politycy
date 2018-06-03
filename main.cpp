@@ -142,7 +142,9 @@ void *odbieraj_zadania(void *arg)
         pthread_mutex_unlock(&printf_lock);
 
         if(dane_odbierane[1] > lamport_zadania){
+            pthread_mutex_lock(&starsza_lock);
             starsza_wiadomosc[dane_odbierane[0]] = 1;
+            pthread_mutex_unlock(&starsza_lock);
         }
         pthread_mutex_lock(&lamport_lock);
         lamport = maxy(lamport, dane_odbierane[1]) + 1;
@@ -206,9 +208,11 @@ int initialize(){
 //    printf("World size is: %d\n",world_size);
 
     starsza_wiadomosc = (int*)malloc(world_size * sizeof(int));
+    pthread_mutex_lock(&starsza_lock);
     for (int i = 0; i < world_size; i++) {
         starsza_wiadomosc[i] = 0;
     }
+    pthread_mutex_unlock(&starsza_lock);
 
     queue = (struct queue_element*)malloc(world_size * sizeof(struct queue_element));
     for(int i = 0; i < world_size; i++){
@@ -230,6 +234,12 @@ int initialize(){
         printf("\n mutex init failed\n");
         return 1;
     }
+    if (pthread_mutex_init(&starsza_lock, NULL) != 0)
+    {
+        printf("\n mutex init failed\n");
+        return 1;
+    }
+    
 
     return 0;
 }
@@ -248,10 +258,11 @@ int main()
 
 
         while(1) {
-
+            pthread_mutex_lock(&starsza_lock);
             for( int i = 0; i < world_size; i++) {
                 starsza_wiadomosc[i] = 0;
             }
+            pthread_mutex_unlock(&starsza_lock);
 
             lamport_zadania = lamport;
             int dane_wysylane[2] = { process_rank, lamport_zadania };
