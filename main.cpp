@@ -296,18 +296,18 @@ int main()
                     fflush(stdout);
                     pthread_mutex_unlock(&printf_lock);
                     break;
+                } else if (sumuj_tablice(starsza_wiadomosc) == world_size - 1) {
+                    printf("(proc %d, lamport %d) szturm nie udany, suma == WS -1\n", process_rank, lamport);
+                } else if (queue[0].process_rank == process_rank) {
+                    printf("(proc %d, lamport %d) szturm nie udany, queue[0] rank == process rank\n", process_rank, lamport);    
                 } else {
-                    printf("(proc %d, lamport %d) szturm na sekcję krytyczną nie udany\n", process_rank, lamport);
+                    printf("(proc %d, lamport %d) nic się nie zgadza\n", process_rank, lamport);    
                 }
                 pthread_mutex_unlock(&queue_lock);
-                for(int wait = 0; wait < 3600000; wait++){
-                    wait+=1;
-                }
+                sleep(1);
             }
 
-            for(int wait2 = 0; wait2 < 3600000; wait2++){
-                wait2+=1;
-            }
+            sleep(2);
 
             pthread_mutex_lock(&printf_lock);
             printf("(proc %d, lamport %d) KONIEC SEKCJI KRYTYCZNEJ .\n", process_rank, lamport);
