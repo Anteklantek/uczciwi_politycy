@@ -51,7 +51,7 @@ void po_printf() {
     printf("] ");
 
     printf("starsza: [");
-    for (int i = 0; i < world_size - 1; i++) {
+    for (int i = 0; i < world_size; i++) {
         printf("%d, ", starsza_wiadomosc[i]);
     }
     printf("] ");
@@ -145,7 +145,7 @@ void *odbieraj(void *arg) {
             }
         } else if (dane_odbierane[2] == ZADANIE_ID) {
             struct queue_element received;
-            print2("odebral żądanie od proc %d, z lamportem %d", dane_odbierane[0], dane_odbierane[1]);
+
 
             if (dane_odbierane[1] > lamport_zadania) {
                 pthread_mutex_lock(&starsza_lock);
@@ -158,6 +158,8 @@ void *odbieraj(void *arg) {
             received.process_rank = dane_odbierane[0];
             received.lamport_clock = dane_odbierane[1];
             insert_into_queue(received);
+
+            print2("odebral żądanie od proc %d, z lamportem %d", dane_odbierane[0], dane_odbierane[1]);
 
             //wyslij acka w odpowiedzi
             int dane_wysylane[3] = {process_rank, lamport, ACKI_ID};
