@@ -161,7 +161,7 @@ void *odbieraj(void *arg) {
 
             pthread_mutex_lock(&lamport_lock);
             lamport += 1;
-            pthread_mutex_lock(&lamport_lock);
+            pthread_mutex_unlock(&lamport_lock);
 
             //wyslij acka w odpowiedzi
             int dane_wysylane[3] = {process_rank, lamport, ACKI_ID};
@@ -256,7 +256,7 @@ int main() {
                     print2("wysłał żądanie do proc %d z lamportem %d", i, dane_wysylane[1]);
                     pthread_mutex_lock(&lamport_lock);
                     lamport += 1;
-                    pthread_mutex_lock(&lamport_lock);
+                    pthread_mutex_unlock(&lamport_lock);
                 }
             }
 
@@ -280,7 +280,7 @@ int main() {
             for (int z = 0; z < world_size; z++) {
                 pthread_mutex_lock(&lamport_lock);
                 lamport += 1;
-                pthread_mutex_lock(&lamport_lock);
+                pthread_mutex_unlock(&lamport_lock);
 
                 if (process_rank == z) {
                     delete_from_queue(z);
