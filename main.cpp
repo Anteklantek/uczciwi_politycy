@@ -40,7 +40,7 @@ pthread_mutex_t lamport_lock, printf_lock, queue_lock, starsza_lock;
 
 void print(const char *text) {
     pthread_mutex_lock(&printf_lock);
-    printf("(proc: %d, lamport: %d, lamport żądania: %d) ", process_rank, lamport, lamport_zadania);
+    printf("(proc: %d, lamport: %d, lamport żądania: %d) ", process_rank, lamportlamport_zadania);
     printf("kolejka: [");
     for (int i = 0; i < world_size - 1; i++) {
         printf("%d, ", queue[i].process_rank);
@@ -183,7 +183,7 @@ void *odbieraj(void *arg) {
             print2("wyslal ACK do proc %d z lamportem %d", dane_odbierane[0], dane_wysylane[1]);
 
         } else if (dane_odbierane[2] = RELEASE_ID) {
-            delete_from_queue(released_process_rank);
+            delete_from_queue(dane_odbierane[0]);
             print1("odebrał release od proc %d", dane_odbierane[0]);
         }
     }
@@ -243,7 +243,7 @@ int main() {
     int error = initialize();
     if (error == 0) {
 
-        pthread_create(&odbieraj_thread, NULL, &odbieraj_acki, (void *) (long) process_rank);
+        pthread_create(&odbieraj_thread, NULL, &odbieraj, (void *) (long) process_rank);
 
         while (1) {
             pthread_mutex_lock(&starsza_lock);
@@ -253,7 +253,7 @@ int main() {
             pthread_mutex_unlock(&starsza_lock);
             print("wyzerowałem starsze");
             lamport_zadania = lamport;
-            int dane_wysylane[2] = {process_rank, lamport_zadania, ZADANIE_ID};
+            int dane_wysylane[3] = {process_rank, lamport_zadania, ZADANIE_ID};
 
             for (int i = 0; i < world_size; i++) {
                 if (i == process_rank) {
@@ -264,9 +264,9 @@ int main() {
                 } else {
                     MPI_Send(&dane_wysylane, 2, MPI_INT, i, MAIN_CHANNEL, MPI_COMM_WORLD);
                     print2("wysłał żądanie do proc %d z lamportem %d", i, dane_wysylane[1]);
-                    pthread_mutex_lock(&lamport);
+                    pthread_mutex_lock(&lamport_lock);
                     lamport+=1;
-                    pthread_mutex_lock(&lamport);
+                    pthread_mutex_lock(&lamport_lock);
                 }
             }
 
@@ -286,9 +286,9 @@ int main() {
             print("KONIEC SEKCJI KRYTYCZNEJ");
 
             for (int z = 0; z < world_size; z++) {
-                pthread_mutex_lock(&lamport);
+                pthread_mutex_lock(&lamport_lock);
                 lamport+=1;
-                pthread_mutex_lock(&lamport);
+                pthread_mutex_lock(&lamport_lock);
 
                 if (process_rank == z) {
                     delete_from_queue(z);
