@@ -286,7 +286,7 @@ int main() {
             }
             pthread_mutex_unlock(&starsza_lock);
 //            print("wyzerowałem starsze");
-            zapotrzebowanie_na_politykow = rand() % 5;
+            zapotrzebowanie_na_politykow = 7;//rand() % 5;
             //      print1("wylosowałem zapotrzebowanie na politykow: %d", zapotrzebowanie_na_politykow);
             lamport_zadania = lamport;
             int dane_wysylane[4] = {process_rank, lamport_zadania, ZADANIE_ID, zapotrzebowanie_na_politykow};
