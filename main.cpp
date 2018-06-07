@@ -257,11 +257,9 @@ int get_my_index_in_queue(){
 
 
 int suma_zapotrzebowan_przede_mna(){
-    pthread_mutex_lock(&queue_lock);
     print("zabralem locka");
     int my_index = get_my_index_in_queue();
     if(my_index == -1){
-        pthread_mutex_unlock(&queue_lock);
         //block entering by
         printf("block entering");
         return LICZBA_POLITYKOW;
@@ -269,9 +267,7 @@ int suma_zapotrzebowan_przede_mna(){
         int sum = 0;
         for(int i = 0; i < my_index; i++){
             sum += queue.at(i).zapotrzebowanie;
-
         }
-        pthread_mutex_unlock(&queue_lock);
         print1("suma zapotrzebowania: %d", sum);
         return sum;
     }
