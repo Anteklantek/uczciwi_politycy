@@ -4,12 +4,15 @@
 #include <stdlib.h>
 #include <mpi.h>
 #include <zconf.h>
+#include <vector>
 
 #define MAIN_CHANNEL 13
 
 #define ACKI_ID 1
 #define RELEASE_ID 2
 #define ZADANIE_ID 3
+
+using namespace std;
 
 struct queue_element {
     int process_rank;//0
@@ -28,7 +31,7 @@ int maxy(int a, int b) {
 int lamport;
 int *starsza_wiadomosc;
 int lamport_zadania;
-struct queue_element *queue;
+vector<queue_element> queue;
 int world_size;
 int process_rank;
 pthread_t odbieraj_thread;
@@ -95,62 +98,46 @@ void print2(const char *text, int a, int b) {
     pthread_mutex_unlock(&printf_lock);
 }
 
-int get_index_of_last_elem();
 
 int get_index_of_given_process_rank(int process_rank);
 
-void insert_into_queue(struct queue_element element_to_insert) {
-    pthread_mutex_lock(&queue_lock);
-    for (int i = 0; i < world_size; i++) {
-        if (queue[i].process_rank == -1) {
-            queue[i].process_rank = element_to_insert.process_rank;
-            queue[i].lamport_clock = element_to_insert.lamport_clock;
-            break;
-        } else if ((queue[i].lamport_clock > element_to_insert.lamport_clock) ||
-                   (queue[i].lamport_clock == element_to_insert.lamport_clock &&
-                    queue[i].process_rank > element_to_insert.process_rank)) {
-            for (int j = get_index_of_last_elem() + 1; j > i; j--) {
-                queue[j].process_rank = queue[j - 1].process_rank;
-                queue[j].lamport_clock = queue[j - 1].lamport_clock;
-            }
-            queue[i].process_rank = element_to_insert.process_rank;
-            queue[i].lamport_clock = element_to_insert.lamport_clock;
-            break;
+int get_position_to_insert(int insert_process_rank, int insert_lamport_clock){
+    for(int i = 0; i < queue.size(); i++){
+        if(queue[i].lamport_clock > insert_lamport_clock || (queue[i].lamport_clock == insert_lamport_clock && queue[i].process_rank > insert_process_rank)){
+            return i;
         }
     }
-    pthread_mutex_unlock(&queue_lock);
+    return -1;
 }
 
-int get_index_of_last_elem() {
-    for (int i = 0; i < world_size; i++) {
-        if (queue[i].process_rank == -1) {
-            return i - 1;
-        }
+void insert_into_queue(struct queue_element element_to_insert) {
+    pthread_mutex_lock(&queue_lock);
+
+    int where = get_position_to_insert(element_to_insert.process_rank, element_to_insert.lamport_clock);
+
+    if(where == -1){
+        vector.push_back(element_to_insert);
+    } else{
+        vector.insert(vector.begin()+where,element_to_insert);
     }
-    return world_size - 1;
+
+    pthread_mutex_unlock(&queue_lock);
 }
 
 void delete_from_queue(int process_rank_to_delete) {
     pthread_mutex_lock(&queue_lock);
     int index = get_index_of_given_process_rank(process_rank_to_delete);
-    int last_index = get_index_of_last_elem();
     if (index == -1) {
-
         print1("Brak elementu z process rank: %d", process_rank_to_delete);
         return;
     }
-    for (int i = index; i < last_index; i++) {
-        queue[i].process_rank = queue[i + 1].process_rank;
-        queue[i].lamport_clock = queue[i + 1].lamport_clock;
-
-    }
-    queue[last_index].process_rank = -1;
+    vector.erase(vector.begin() + i);
     pthread_mutex_unlock(&queue_lock);
 }
 
-int get_index_of_given_process_rank(int process_rank) {
-    for (int i = 0; i < world_size; i++) {
-        if (queue[i].process_rank == process_rank)
+int get_index_of_given_process_rank(int comparing_process_rank) {
+    for (int i = 0; i < vector.size(); i++) {
+        if (vector[i].process_rank == comparing_process_rank)
             return i;
     }
     return -1;
@@ -228,10 +215,6 @@ int initialize() {
     }
     pthread_mutex_unlock(&starsza_lock);
 
-    queue = (struct queue_element *) malloc(world_size * sizeof(struct queue_element));
-    for (int i = 0; i < world_size; i++) {
-        queue[i].process_rank = -1;
-    }
 
     if (pthread_mutex_init(&lamport_lock, NULL) != 0) {
         printf("\n mutex init failed\n");
