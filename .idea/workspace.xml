@@ -35,8 +35,8 @@
       <file leaf-file-name="main.cpp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="765">
-              <caret line="255" column="66" selection-start-line="255" selection-start-column="66" selection-end-line="255" selection-end-column="66" />
+            <state relative-caret-position="329">
+              <caret line="247" column="28" selection-start-line="247" selection-start-column="28" selection-end-line="247" selection-end-column="28" />
             </state>
           </provider>
         </entry>
@@ -69,6 +69,7 @@
       <find>odbieraj_ack</find>
       <find>odbieraj</find>
       <find>erase</find>
+      <find>MPI_Send</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -169,7 +170,7 @@
       <workItem from="1528044027210" duration="1221000" />
       <workItem from="1528046220186" duration="2511000" />
       <workItem from="1528060129399" duration="4397000" />
-      <workItem from="1528376602364" duration="8516000" />
+      <workItem from="1528376602364" duration="8600000" />
     </task>
     <task id="LOCAL-00001" summary="Moze zadziala">
       <created>1528395004118</created>
@@ -241,11 +242,18 @@
       <option name="project" value="LOCAL" />
       <updated>1528398585384</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="fix compilation bugs">
+      <created>1528398712936</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1528398712936</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="35546000" />
+    <option name="totallyTimeSpent" value="35630000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1096" extended-state="6" />
@@ -463,8 +471,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/main.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="765">
-          <caret line="255" column="66" selection-start-line="255" selection-start-column="66" selection-end-line="255" selection-end-column="66" />
+        <state relative-caret-position="329">
+          <caret line="247" column="28" selection-start-line="247" selection-start-column="28" selection-end-line="247" selection-end-column="28" />
         </state>
       </provider>
     </entry>

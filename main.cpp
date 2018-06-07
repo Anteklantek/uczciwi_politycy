@@ -245,7 +245,7 @@ int main() {
                     elem.lamport_clock = dane_wysylane[1];
                     insert_into_queue(elem);
                 } else {
-                    MPI_Send(&dane_wysylane, 2, MPI_INT, i, MAIN_CHANNEL, MPI_COMM_WORLD);
+                    MPI_Send(&dane_wysylane,3, MPI_INT, i, MAIN_CHANNEL, MPI_COMM_WORLD);
                     print2("wysłał żądanie do proc %d z lamportem %d", i, dane_wysylane[1]);
                     pthread_mutex_lock(&lamport_lock);
                     lamport += 1;
