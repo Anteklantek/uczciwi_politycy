@@ -267,9 +267,10 @@ int suma_zapotrzebowan_przede_mna(){
         int sum = 0;
         for(int i = 0; i < my_index; i++){
             sum += queue.at(i).zapotrzebowanie;
-            pthread_mutex_unlock(&queue_lock);
-            return sum;
+
         }
+        pthread_mutex_unlock(&queue_lock);
+        return sum;
     }
 }
 
