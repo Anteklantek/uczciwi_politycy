@@ -44,7 +44,7 @@ void przed_printf() {
 }
 
 void po_printf() {
-    printf("kolejka: [");
+    printf(" kolejka: [");
     for (int i = 0; i < queue.size(); i++) {
         printf("%d, ", queue.at(i).process_rank);
     }
@@ -252,6 +252,8 @@ int main() {
                     pthread_mutex_lock(&lamport_lock);
                 }
             }
+
+            print("skonczylem wysylac zadania, czekam na sekcje");
 
             while (1) {
                 pthread_mutex_lock(&queue_lock);
