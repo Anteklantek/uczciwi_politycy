@@ -174,7 +174,7 @@ void *odbieraj(void *arg) {
             received.zapotrzebowanie = dane_odbierane[3];
             insert_into_queue(received);
 
-            print2("odebral żądanie od proc %d, z lamportem %d i zapotrzebowaniem %d", dane_odbierane[0], dane_odbierane[1], dane_odbierane[3]);
+            print3("odebral żądanie od proc %d, z lamportem %d i zapotrzebowaniem %d", dane_odbierane[0], dane_odbierane[1], dane_odbierane[3]);
 
             pthread_mutex_lock(&lamport_lock);
             lamport += 1;
