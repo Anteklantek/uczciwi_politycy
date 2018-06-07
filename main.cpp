@@ -43,7 +43,7 @@ void print(const char *text) {
     printf("(proc: %d, lamport: %d, lamport żądania: %d) ", process_rank,lamport, lamport_zadania);
     printf("kolejka: [");
     for (int i = 0; i < world_size - 1; i++) {
-        printf("%d, ", queue[i].process_rank);
+        printf("%d, ", queue.at(i).process_rank);
     }
     printf("%d] ", queue[world_size - 1].process_rank);
 
