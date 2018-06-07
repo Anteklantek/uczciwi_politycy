@@ -116,9 +116,9 @@ void insert_into_queue(struct queue_element element_to_insert) {
     int where = get_position_to_insert(element_to_insert.process_rank, element_to_insert.lamport_clock);
 
     if(where == -1){
-        vector.push_back(element_to_insert);
+        queue.push_back(element_to_insert);
     } else{
-        vector.insert(vector.begin()+where,element_to_insert);
+        queue.insert(queue.begin()+where,element_to_insert);
     }
 
     pthread_mutex_unlock(&queue_lock);
@@ -131,13 +131,13 @@ void delete_from_queue(int process_rank_to_delete) {
         print1("Brak elementu z process rank: %d", process_rank_to_delete);
         return;
     }
-    vector.erase(vector.begin() + i);
+    queue.erase(queue.begin() + i);
     pthread_mutex_unlock(&queue_lock);
 }
 
 int get_index_of_given_process_rank(int comparing_process_rank) {
-    for (int i = 0; i < vector.size(); i++) {
-        if (vector[i].process_rank == comparing_process_rank)
+    for (int i = 0; i < queue.size(); i++) {
+        if (queue[i].process_rank == comparing_process_rank)
             return i;
     }
     return -1;
