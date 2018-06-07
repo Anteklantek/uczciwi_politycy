@@ -38,64 +38,45 @@ pthread_t odbieraj_thread;
 pthread_mutex_t lamport_lock, printf_lock, queue_lock, starsza_lock;
 
 
-void print(const char *text) {
+void przed_printf() {
     pthread_mutex_lock(&printf_lock);
-    printf("(proc: %d, lamport: %d, lamport żądania: %d) ", process_rank,lamport, lamport_zadania);
+    printf("(proc: %d, lamport: %d, lamport żądania: %d) ", process_rank, lamport, lamport_zadania);
     printf("kolejka: [");
-    for (int i = 0; i < world_size - 1; i++) {
+    for (int i = 0; i < queue.size(); i++) {
         printf("%d, ", queue.at(i).process_rank);
     }
-    printf("%d] ", queue[world_size - 1].process_rank);
+    printf("] ");
 
     printf("starsza: [");
     for (int i = 0; i < world_size - 1; i++) {
         printf("%d, ", starsza_wiadomosc[i]);
     }
-    printf("%d] ", starsza_wiadomosc[world_size - 1]);
-    printf("%s", text);
+    printf("] ");
+}
+
+void po_printf() {
     printf("\n");
     fflush(stdout);
     pthread_mutex_unlock(&printf_lock);
+}
+
+
+void print(const char *text) {
+    przed_printf();
+    printf("%s", text);
+    po_printf();
 }
 
 void print1(const char *text, int a) {
-    pthread_mutex_lock(&printf_lock);
-    printf("(proc: %d, lamport: %d, lamport żądania: %d) ", process_rank, lamport, lamport_zadania);
-    printf("kolejka: [");
-    for (int i = 0; i < world_size - 1; i++) {
-        printf("%d, ", queue[i].process_rank);
-    }
-    printf("%d] ", queue[world_size - 1].process_rank);
-
-    printf("starsza: [");
-    for (int i = 0; i < world_size - 1; i++) {
-        printf("%d, ", starsza_wiadomosc[i]);
-    }
-    printf("%d] ", starsza_wiadomosc[world_size - 1]);
+    przed_printf();
     printf(text, a);
-    printf("\n");
-    fflush(stdout);
-    pthread_mutex_unlock(&printf_lock);
+    po_printf();
 }
 
 void print2(const char *text, int a, int b) {
-    pthread_mutex_lock(&printf_lock);
-    printf("(proc: %d, lamport: %d, lamport żądania: %d) ", process_rank, lamport, lamport_zadania);
-    printf("kolejka: [");
-    for (int i = 0; i < world_size - 1; i++) {
-        printf("%d, ", queue[i].process_rank);
-    }
-    printf("%d] ", queue[world_size - 1].process_rank);
-
-    printf("starsza: [");
-    for (int i = 0; i < world_size - 1; i++) {
-        printf("%d, ", starsza_wiadomosc[i]);
-    }
-    printf("%d] ", starsza_wiadomosc[world_size - 1]);
+    przed_printf();
     printf(text, a, b);
-    printf("\n");
-    fflush(stdout);
-    pthread_mutex_unlock(&printf_lock);
+    po_printf();
 }
 
 
