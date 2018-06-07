@@ -40,7 +40,7 @@ pthread_mutex_t lamport_lock, printf_lock, queue_lock, starsza_lock;
 
 void print(const char *text) {
     pthread_mutex_lock(&printf_lock);
-    printf("(proc: %d, lamport: %d, lamport żądania: %d) ", process_rank, lamportlamport_zadania);
+    printf("(proc: %d, lamport: %d, lamport żądania: %d) ", process_rank, lamport_zadania);
     printf("kolejka: [");
     for (int i = 0; i < world_size - 1; i++) {
         printf("%d, ", queue[i].process_rank);
