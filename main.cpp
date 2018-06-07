@@ -262,6 +262,7 @@ int suma_zapotrzebowan_przede_mna(){
     if(my_index == -1){
         pthread_mutex_unlock(&queue_lock);
         //block entering by
+        printf("block entering");
         return LICZBA_POLITYKOW;
     } else {
         int sum = 0;
@@ -270,6 +271,7 @@ int suma_zapotrzebowan_przede_mna(){
 
         }
         pthread_mutex_unlock(&queue_lock);
+        print("suma zapotrzebowania: %d", sum);
         return sum;
     }
 }
