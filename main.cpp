@@ -5,6 +5,8 @@
 #include <mpi.h>
 #include <zconf.h>
 #include <vector>
+#include <cstdlib>
+#include <ctime>
 
 #define MAIN_CHANNEL 13
 
@@ -12,12 +14,17 @@
 #define RELEASE_ID 2
 #define ZADANIE_ID 3
 
+#define LICZBA_POLITYKOW 20
+
 using namespace std;
 
 struct queue_element {
     int process_rank;//0
     int lamport_clock;//1
+    int zapotrzebowanie;//2
 };
+
+
 
 
 int maxy(int a, int b) {
@@ -34,6 +41,7 @@ int lamport_zadania;
 vector <queue_element> queue;
 int world_size;
 int process_rank;
+int zapotrzebowanie_na_politykow;
 pthread_t odbieraj_thread;
 pthread_mutex_t lamport_lock, printf_lock, queue_lock, starsza_lock;
 
@@ -79,6 +87,12 @@ void print2(const char *text, int a, int b) {
     po_printf();
 }
 
+void print3(const char *text, int a, int b, int c) {
+    przed_printf();
+    printf(text, a, b, c);
+    po_printf();
+}
+
 
 int get_index_of_given_process_rank(int process_rank);
 
@@ -111,6 +125,7 @@ void delete_from_queue(int process_rank_to_delete) {
     int index = get_index_of_given_process_rank(process_rank_to_delete);
     if (index == -1) {
         print1("Brak elementu z process rank: %d", process_rank_to_delete);
+        pthread_mutex_unlock(&queue_lock);
         return;
     } else {
         queue.erase(queue.begin() + index);
@@ -132,9 +147,9 @@ int sumuj_tablice(int *tab);
 
 void *odbieraj(void *arg) {
 
-    int dane_odbierane[3];
+    int dane_odbierane[4];
     while (1) {
-        MPI_Recv(&dane_odbierane, 3, MPI_INT, MPI_ANY_SOURCE, MAIN_CHANNEL, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        MPI_Recv(&dane_odbierane, 4, MPI_INT, MPI_ANY_SOURCE, MAIN_CHANNEL, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
         if (dane_odbierane[2] == ACKI_ID) {
 
             if (dane_odbierane[1] > lamport_zadania) {
@@ -153,19 +168,21 @@ void *odbieraj(void *arg) {
             pthread_mutex_lock(&lamport_lock);
             lamport = maxy(lamport, dane_odbierane[1]) + 1;
             pthread_mutex_unlock(&lamport_lock);
+
             received.process_rank = dane_odbierane[0];
             received.lamport_clock = dane_odbierane[1];
+            received.zapotrzebowanie = dane_odbierane[3];
             insert_into_queue(received);
 
-            print2("odebral żądanie od proc %d, z lamportem %d", dane_odbierane[0], dane_odbierane[1]);
+            print2("odebral żądanie od proc %d, z lamportem %d i zapotrzebowaniem %d", dane_odbierane[0], dane_odbierane[1], dane_odbierane[3]);
 
             pthread_mutex_lock(&lamport_lock);
             lamport += 1;
             pthread_mutex_unlock(&lamport_lock);
 
             //wyslij acka w odpowiedzi
-            int dane_wysylane[3] = {process_rank, lamport, ACKI_ID};
-            MPI_Send(&dane_wysylane, 3, MPI_INT, dane_odbierane[0], MAIN_CHANNEL, MPI_COMM_WORLD);
+            int dane_wysylane[4] = {process_rank, lamport, ACKI_ID,-1};
+            MPI_Send(&dane_wysylane, 4, MPI_INT, dane_odbierane[0], MAIN_CHANNEL, MPI_COMM_WORLD);
 
             print2("wyslal ACK do proc %d z lamportem %d", dane_odbierane[0], dane_wysylane[1]);
 
@@ -223,8 +240,37 @@ int initialize() {
         return 1;
     }
 
+    srand((unsigned)time(0));
 
     return 0;
+}
+
+int get_my_index_in_queue(){
+    for(int i = 0; i < queue.size();i++){
+        if(queue.at(i).process_rank = process_rank){
+            return i;
+        }
+    }
+    print("nie ma mnie w kolejce");
+    return -1;
+}
+
+
+int suma_zapotrzebowan_przede_mna(){
+    pthread_mutex_lock(&queue_lock);
+    int my_index = get_my_index_in_queue();
+    if(my_index == -1){
+        pthread_mutex_unlock(&queue_lock);
+        //block entering by
+        return LICZBA_POLITYKOW;
+    } else {
+        int sum = 0;
+        for(int i = 0; i < my_index; i++){
+            sum += queue.at(i).zapotrzebowanie;
+            pthread_mutex_unlock(&queue_lock);
+            return sum;
+        }
+    }
 }
 
 
@@ -242,29 +288,31 @@ int main() {
             }
             pthread_mutex_unlock(&starsza_lock);
             print("wyzerowałem starsze");
+            zapotrzebowanie_na_politykow = rand()%5;
+            print("wylosowałem zapotrzebowanie na politykow: %d", zapotrzebowanie_na_politykow);
             lamport_zadania = lamport;
-            int dane_wysylane[3] = {process_rank, lamport_zadania, ZADANIE_ID};
+            int dane_wysylane[4] = {process_rank, lamport_zadania, ZADANIE_ID, zapotrzebowanie_na_politykow};
 
             for (int i = 0; i < world_size; i++) {
                 if (i == process_rank) {
                     struct queue_element elem;
                     elem.process_rank = dane_wysylane[0];
                     elem.lamport_clock = dane_wysylane[1];
+                    elem.zapotrzebowanie = dane_wysylane[2];
                     insert_into_queue(elem);
                 } else {
-                    MPI_Send(&dane_wysylane, 3, MPI_INT, i, MAIN_CHANNEL, MPI_COMM_WORLD);
-                    print2("wysłał żądanie do proc %d z lamportem %d", i, dane_wysylane[1]);
+                    MPI_Send(&dane_wysylane, 4, MPI_INT, i, MAIN_CHANNEL, MPI_COMM_WORLD);
+                    print2("wysłał żądanie do proc %d z lamportem %d, zapotrzebowanie %d", i, dane_wysylane[1], dane_wysylane[3]);
                     pthread_mutex_lock(&lamport_lock);
                     lamport += 1;
                     pthread_mutex_unlock(&lamport_lock);
                 }
             }
 
-            print("skonczylem wysylac zadania, czekam na sekcje");
 
             while (1) {
                 pthread_mutex_lock(&queue_lock);
-                if ((sumuj_tablice(starsza_wiadomosc) == world_size - 1) && (queue[0].process_rank == process_rank)) {
+                if ((sumuj_tablice(starsza_wiadomosc) == world_size - 1) && (suma_zapotrzebowan_przede_mna() + zapotrzebowanie_na_politykow <= LICZBA_POLITYKOW)) {
                     print("SEKCJA KRYTYCZNA");
                     pthread_mutex_unlock(&queue_lock);
                     break;
@@ -300,9 +348,11 @@ int main() {
 }
 
 int sumuj_tablice(int *tab) {
+    pthread_mutex_lock(&starsza_lock);
     int sum = 0;
     for (int i = 0; i < world_size; i++) {
         sum += tab[i];
     }
+    pthread_mutex_unlock(&starsza_lock);
     return sum;
 }
