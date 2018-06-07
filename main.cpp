@@ -40,7 +40,10 @@ pthread_mutex_t lamport_lock, printf_lock, queue_lock, starsza_lock;
 
 void przed_printf() {
     pthread_mutex_lock(&printf_lock);
-    printf("(proc: %d, lamport: %d, lamport żądania: %d) ", process_rank, lamport, lamport_zadania);
+    printf("(lamport: %d, lamport żądania: %d, proc: %d) ", lamport, lamport_zadania, process_rank);
+}
+
+void po_printf() {
     printf("kolejka: [");
     for (int i = 0; i < queue.size(); i++) {
         printf("%d, ", queue.at(i).process_rank);
@@ -52,9 +55,6 @@ void przed_printf() {
         printf("%d, ", starsza_wiadomosc[i]);
     }
     printf("] ");
-}
-
-void po_printf() {
     printf("\n");
     fflush(stdout);
     pthread_mutex_unlock(&printf_lock);
