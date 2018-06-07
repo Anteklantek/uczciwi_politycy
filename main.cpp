@@ -273,7 +273,7 @@ int main() {
                 sleep(1);
             }
 
-            sleep(2);
+            sleep(4);
 
             print("KONIEC SEKCJI KRYTYCZNEJ");
 
