@@ -31,7 +31,7 @@ int maxy(int a, int b) {
 int lamport;
 int *starsza_wiadomosc;
 int lamport_zadania;
-vector<queue_element> queue;
+vector <queue_element> queue;
 int world_size;
 int process_rank;
 pthread_t odbieraj_thread;
@@ -101,9 +101,10 @@ void print2(const char *text, int a, int b) {
 
 int get_index_of_given_process_rank(int process_rank);
 
-int get_position_to_insert(int insert_process_rank, int insert_lamport_clock){
-    for(int i = 0; i < queue.size(); i++){
-        if(queue[i].lamport_clock > insert_lamport_clock || (queue[i].lamport_clock == insert_lamport_clock && queue[i].process_rank > insert_process_rank)){
+int get_position_to_insert(int insert_process_rank, int insert_lamport_clock) {
+    for (int i = 0; i < queue.size(); i++) {
+        if (queue[i].lamport_clock > insert_lamport_clock ||
+            (queue[i].lamport_clock == insert_lamport_clock && queue[i].process_rank > insert_process_rank)) {
             return i;
         }
     }
@@ -115,10 +116,10 @@ void insert_into_queue(struct queue_element element_to_insert) {
 
     int where = get_position_to_insert(element_to_insert.process_rank, element_to_insert.lamport_clock);
 
-    if(where == -1){
+    if (where == -1) {
         queue.push_back(element_to_insert);
-    } else{
-        queue.insert(queue.begin()+where,element_to_insert);
+    } else {
+        queue.insert(queue.begin() + where, element_to_insert);
     }
 
     pthread_mutex_unlock(&queue_lock);
@@ -130,8 +131,9 @@ void delete_from_queue(int process_rank_to_delete) {
     if (index == -1) {
         print1("Brak elementu z process rank: %d", process_rank_to_delete);
         return;
+    } else {
+        queue.erase(queue.begin() + index);
     }
-    queue.erase(queue.begin() + i);
     pthread_mutex_unlock(&queue_lock);
 }
 
@@ -265,7 +267,7 @@ int main() {
                     MPI_Send(&dane_wysylane, 2, MPI_INT, i, MAIN_CHANNEL, MPI_COMM_WORLD);
                     print2("wysłał żądanie do proc %d z lamportem %d", i, dane_wysylane[1]);
                     pthread_mutex_lock(&lamport_lock);
-                    lamport+=1;
+                    lamport += 1;
                     pthread_mutex_lock(&lamport_lock);
                 }
             }
@@ -287,7 +289,7 @@ int main() {
 
             for (int z = 0; z < world_size; z++) {
                 pthread_mutex_lock(&lamport_lock);
-                lamport+=1;
+                lamport += 1;
                 pthread_mutex_lock(&lamport_lock);
 
                 if (process_rank == z) {
