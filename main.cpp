@@ -246,7 +246,7 @@ int initialize() {
 
 int get_my_index_in_queue() {
     for (int i = 0; i < queue.size(); i++) {
-        if (queue.at(i).process_rank = process_rank) {
+        if (queue.at(i).process_rank == process_rank) {
             return i;
         }
     }
@@ -256,7 +256,6 @@ int get_my_index_in_queue() {
 
 
 int suma_zapotrzebowan_przede_mna() {
-    print("zabralem locka");
     int my_index = get_my_index_in_queue();
     if (my_index == -1) {
         //block entering by
@@ -351,12 +350,10 @@ int main() {
 
 int sumuj_tablice(int *tab) {
     pthread_mutex_lock(&starsza_lock);
-    print("zabrałem starsze");
     int sum = 0;
     for (int i = 0; i < world_size; i++) {
         sum += tab[i];
     }
     pthread_mutex_unlock(&starsza_lock);
-    print("oddalem starsze");
     return sum;
 }
