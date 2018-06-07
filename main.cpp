@@ -289,7 +289,7 @@ int main() {
             pthread_mutex_unlock(&starsza_lock);
             print("wyzerowałem starsze");
             zapotrzebowanie_na_politykow = rand()%5;
-            print("wylosowałem zapotrzebowanie na politykow: %d", zapotrzebowanie_na_politykow);
+            print1("wylosowałem zapotrzebowanie na politykow: %d", zapotrzebowanie_na_politykow);
             lamport_zadania = lamport;
             int dane_wysylane[4] = {process_rank, lamport_zadania, ZADANIE_ID, zapotrzebowanie_na_politykow};
 
@@ -302,7 +302,7 @@ int main() {
                     insert_into_queue(elem);
                 } else {
                     MPI_Send(&dane_wysylane, 4, MPI_INT, i, MAIN_CHANNEL, MPI_COMM_WORLD);
-                    print2("wysłał żądanie do proc %d z lamportem %d, zapotrzebowanie %d", i, dane_wysylane[1], dane_wysylane[3]);
+                    print3("wysłał żądanie do proc %d z lamportem %d, zapotrzebowanie %d", i, dane_wysylane[1], dane_wysylane[3]);
                     pthread_mutex_lock(&lamport_lock);
                     lamport += 1;
                     pthread_mutex_unlock(&lamport_lock);
