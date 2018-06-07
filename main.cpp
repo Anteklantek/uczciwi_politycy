@@ -136,17 +136,15 @@ void *odbieraj(void *arg) {
     while (1) {
         MPI_Recv(&dane_odbierane, 3, MPI_INT, MPI_ANY_SOURCE, MAIN_CHANNEL, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
         if (dane_odbierane[2] == ACKI_ID) {
-            print2("odebral ACK od proc %d, z lamportem %d", dane_odbierane[0], dane_odbierane[1]);
 
             if (dane_odbierane[1] > lamport_zadania) {
                 pthread_mutex_lock(&starsza_lock);
                 starsza_wiadomosc[dane_odbierane[0]] = 1;
                 pthread_mutex_unlock(&starsza_lock);
             }
+            print2("odebral ACK od proc %d, z lamportem %d", dane_odbierane[0], dane_odbierane[1]);
         } else if (dane_odbierane[2] == ZADANIE_ID) {
             struct queue_element received;
-
-
             if (dane_odbierane[1] > lamport_zadania) {
                 pthread_mutex_lock(&starsza_lock);
                 starsza_wiadomosc[dane_odbierane[0]] = 1;
@@ -161,6 +159,10 @@ void *odbieraj(void *arg) {
 
             print2("odebral żądanie od proc %d, z lamportem %d", dane_odbierane[0], dane_odbierane[1]);
 
+            pthread_mutex_lock(&lamport_lock);
+            lamport += 1;
+            pthread_mutex_lock(&lamport_lock);
+
             //wyslij acka w odpowiedzi
             int dane_wysylane[3] = {process_rank, lamport, ACKI_ID};
             MPI_Send(&dane_wysylane, 3, MPI_INT, dane_odbierane[0], MAIN_CHANNEL, MPI_COMM_WORLD);
@@ -168,6 +170,9 @@ void *odbieraj(void *arg) {
             print2("wyslal ACK do proc %d z lamportem %d", dane_odbierane[0], dane_wysylane[1]);
 
         } else if (dane_odbierane[2] = RELEASE_ID) {
+            pthread_mutex_lock(&lamport_lock);
+            lamport = maxy(lamport, dane_odbierane[1]) + 1;
+            pthread_mutex_unlock(&lamport_lock);
             delete_from_queue(dane_odbierane[0]);
             print1("odebrał release od proc %d", dane_odbierane[0]);
         }
