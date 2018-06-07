@@ -271,7 +271,7 @@ int suma_zapotrzebowan_przede_mna(){
 
         }
         pthread_mutex_unlock(&queue_lock);
-        print("suma zapotrzebowania: %d", sum);
+        print1("suma zapotrzebowania: %d", sum);
         return sum;
     }
 }

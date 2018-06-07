@@ -35,8 +35,8 @@
       <file leaf-file-name="main.cpp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="226">
-              <caret line="264" column="33" selection-start-line="264" selection-start-column="33" selection-end-line="264" selection-end-column="33" />
+            <state relative-caret-position="379">
+              <caret line="273" column="14" selection-start-line="273" selection-start-column="14" selection-end-line="273" selection-end-column="14" />
             </state>
           </provider>
         </entry>
@@ -174,7 +174,7 @@
       <workItem from="1528044027210" duration="1221000" />
       <workItem from="1528046220186" duration="2511000" />
       <workItem from="1528060129399" duration="4397000" />
-      <workItem from="1528376602364" duration="13316000" />
+      <workItem from="1528376602364" duration="13362000" />
     </task>
     <task id="LOCAL-00001" summary="Moze zadziala">
       <created>1528395004118</created>
@@ -323,11 +323,18 @@
       <option name="project" value="LOCAL" />
       <updated>1528405247520</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="adding politicians limits">
+      <created>1528405514974</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1528405514974</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="40346000" />
+    <option name="totallyTimeSpent" value="40392000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1096" extended-state="6" />
@@ -546,8 +553,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/main.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="226">
-          <caret line="264" column="33" selection-start-line="264" selection-start-column="33" selection-end-line="264" selection-end-column="33" />
+        <state relative-caret-position="379">
+          <caret line="273" column="14" selection-start-line="273" selection-start-column="14" selection-end-line="273" selection-end-column="14" />
         </state>
       </provider>
     </entry>
