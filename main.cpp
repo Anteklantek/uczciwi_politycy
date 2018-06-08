@@ -53,7 +53,8 @@ pthread_mutex_t lamport_lock, printf_lock, queue_lock_politycy, starsza_lock_pol
 
 void przed_printf() {
     pthread_mutex_lock(&printf_lock);
-    printf("(lamport: %d, lamport żądania: %d, proc: %d) ", lamport, lamport_zadania_politycy, process_rank);
+//    printf("(lamport: %d, lamport żądania: %d, proc: %d) ", lamport, lamport_zadania_politycy, process_rank);
+    printf("(lamport: %d, proc: %d) ", lamport, process_rank);
 }
 
 void po_printf() {
