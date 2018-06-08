@@ -34,8 +34,8 @@
       <file leaf-file-name="main.cpp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="804">
-              <caret line="545" column="34" selection-start-line="545" selection-start-column="34" selection-end-line="545" selection-end-column="34" />
+            <state relative-caret-position="2777">
+              <caret line="180" selection-start-line="180" selection-end-line="180" />
             </state>
           </provider>
         </entry>
@@ -69,11 +69,11 @@
       <find>MPI_Send</find>
       <find>delete_from_queue</find>
       <find>get_index_of</find>
-      <find>get_index_of_given_process_rank</find>
       <find>insert_into_queue(e</find>
       <find>insert_into_queue(</find>
       <find>POLIT_MAIN_ID</find>
       <find>POLITYCY_MAIN_ID</find>
+      <find>get_index_of_given_process_rank</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -175,7 +175,7 @@
       <workItem from="1528046220186" duration="2511000" />
       <workItem from="1528060129399" duration="4397000" />
       <workItem from="1528376602364" duration="14600000" />
-      <workItem from="1528439599913" duration="7973000" />
+      <workItem from="1528439599913" duration="8379000" />
     </task>
     <task id="LOCAL-00001" summary="Moze zadziala">
       <created>1528395004118</created>
@@ -464,11 +464,18 @@
       <option name="project" value="LOCAL" />
       <updated>1528449078196</updated>
     </task>
-    <option name="localTasksCounter" value="42" />
+    <task id="LOCAL-00042" summary="added sanatorium">
+      <created>1528449445104</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1528449445104</updated>
+    </task>
+    <option name="localTasksCounter" value="43" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="49603000" />
+    <option name="totallyTimeSpent" value="50009000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1096" extended-state="6" />
@@ -703,8 +710,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/main.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="804">
-          <caret line="545" column="34" selection-start-line="545" selection-start-column="34" selection-end-line="545" selection-end-column="34" />
+        <state relative-caret-position="2777">
+          <caret line="180" selection-start-line="180" selection-end-line="180" />
         </state>
       </provider>
     </entry>

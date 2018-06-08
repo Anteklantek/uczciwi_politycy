@@ -302,7 +302,7 @@ void *odbieraj(void *arg) {
                 lamport = maxy(lamport, dane_odbierane[1]) + 1;
                 pthread_mutex_unlock(&lamport_lock);
                 delete_from_queue(dane_odbierane[0], SANATORIA_MAIN_ID);
-                print1("odebrał release od proc %d", dane_odbierane[0]);
+//                print1("odebrał release od proc %d", dane_odbierane[0]);
             }
 
 
