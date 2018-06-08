@@ -275,7 +275,7 @@ void *odbieraj(void *arg) {
                 received.process_rank = dane_odbierane[0];
                 received.lamport_clock = dane_odbierane[1];
                 received.zapotrzebowanie = dane_odbierane[3];
-                insert_into_queue(received);
+                insert_into_queue(received, SANATORIA_MAIN_ID);
 
 //            print3("odebral żądanie od proc %d, z lamportem %d i zapotrzebowaniem %d", dane_odbierane[0],
 //                   dane_odbierane[1], dane_odbierane[3]);
