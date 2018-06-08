@@ -528,7 +528,7 @@ int main() {
 
 
             for (int z = 0; z < world_size; z++) {
-
+                print("wysyałam release na sanatorium, z: %d", z);
                 pthread_mutex_lock(&lamport_lock);
                 lamport += 1;
                 pthread_mutex_unlock(&lamport_lock);
