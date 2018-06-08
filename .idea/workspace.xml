@@ -35,8 +35,8 @@
       <file leaf-file-name="main.cpp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="329">
-              <caret line="100" column="35" selection-start-line="100" selection-start-column="35" selection-end-line="100" selection-end-column="35" />
+            <state relative-caret-position="527">
+              <caret line="496" column="67" selection-start-line="496" selection-start-column="67" selection-end-line="496" selection-end-column="67" />
             </state>
           </provider>
         </entry>
@@ -45,8 +45,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>CHANNEL</find>
-      <find>ADD_TO_QUEUE</find>
       <find>ADD</find>
       <find>ADD_T</find>
       <find>MPI_SEND</find>
@@ -75,6 +73,8 @@
       <find>delete_from_queue</find>
       <find>get_index_of</find>
       <find>get_index_of_given_process_rank</find>
+      <find>insert_into_queue(e</find>
+      <find>insert_into_queue(</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -176,7 +176,7 @@
       <workItem from="1528046220186" duration="2511000" />
       <workItem from="1528060129399" duration="4397000" />
       <workItem from="1528376602364" duration="14600000" />
-      <workItem from="1528439599913" duration="6444000" />
+      <workItem from="1528439599913" duration="6691000" />
     </task>
     <task id="LOCAL-00001" summary="Moze zadziala">
       <created>1528395004118</created>
@@ -395,11 +395,25 @@
       <option name="project" value="LOCAL" />
       <updated>1528445182948</updated>
     </task>
-    <option name="localTasksCounter" value="32" />
+    <task id="LOCAL-00032" summary="added sanatorium">
+      <created>1528447806436</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1528447806436</updated>
+    </task>
+    <task id="LOCAL-00033" summary="added sanatorium">
+      <created>1528447952100</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1528447952100</updated>
+    </task>
+    <option name="localTasksCounter" value="34" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="48074000" />
+    <option name="totallyTimeSpent" value="48321000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1096" extended-state="6" />
@@ -634,8 +648,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/main.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="329">
-          <caret line="100" column="35" selection-start-line="100" selection-start-column="35" selection-end-line="100" selection-end-column="35" />
+        <state relative-caret-position="527">
+          <caret line="496" column="67" selection-start-line="496" selection-start-column="67" selection-end-line="496" selection-end-column="67" />
         </state>
       </provider>
     </entry>

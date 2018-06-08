@@ -454,9 +454,9 @@ int main() {
             for (int i = 0; i < world_size; i++) {
                 if (i == process_rank) {
                     struct queue_element elem;
-                    elem.process_rank = dane_wysylane[0];
-                    elem.lamport_clock = dane_wysylane[1];
-                    elem.zapotrzebowanie = dane_wysylane[2];
+                    elem.process_rank = dane_wysylane_politycy[0];
+                    elem.lamport_clock = dane_wysylane_politycy[1];
+                    elem.zapotrzebowanie = dane_wysylane_politycy[2];
                     insert_into_queue(elem, POLITYCY_MAIN_ID);
                 } else {
                     MPI_Send(&dane_wysylane_politycy, 5, MPI_INT, i, MAIN_CHANNEL, MPI_COMM_WORLD);
@@ -492,9 +492,9 @@ int main() {
             for (int i = 0; i < world_size; i++) {
                 if (i == process_rank) {
                     struct queue_element elem;
-                    elem.process_rank = dane_wysylane[0];
-                    elem.lamport_clock = dane_wysylane[1];
-                    elem.zapotrzebowanie = dane_wysylane[2];
+                    elem.process_rank = dane_wysylane_sanatorium[0];
+                    elem.lamport_clock = dane_wysylane_sanatorium[1];
+                    elem.zapotrzebowanie = dane_wysylane_sanatorium[2];
                     insert_into_queue(elem, SANATORIA_MAIN_ID);
                 } else {
                     MPI_Send(&dane_wysylane_sanatorium, 5, MPI_INT, i, MAIN_CHANNEL, MPI_COMM_WORLD);
