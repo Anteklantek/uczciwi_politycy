@@ -57,11 +57,18 @@ void przed_printf() {
 }
 
 void po_printf() {
-    printf(" kolejka: [");
+    printf(" kolejka politycy: [");
+    for (int i = 0; i < politycy_queue.size(); i++) {
+        printf("%d, ", politycy_queue.at(i).process_rank);
+    }
+    printf("] ");
+
+    printf(" kolejka sanatorium: [");
     for (int i = 0; i < sanatorium_queue.size(); i++) {
         printf("%d, ", sanatorium_queue.at(i).process_rank);
     }
     printf("] ");
+
 //    printf("starsza: [");
 //    for (int i = 0; i < world_size - 1; i++) {
 //        printf("%d, ", starsza_politycy[i]);
@@ -171,7 +178,6 @@ void delete_from_queue(int process_rank_to_delete, int queue_identifier) {
     } else if (queue_identifier == SANATORIA_MAIN_ID) {
         pthread_mutex_lock(&queue_lock_sanatoria);
         int index = get_index_of_given_process_rank(process_rank_to_delete, SANATORIA_MAIN_ID);
-        print2("usuwam z sanatorium queue: %d, jest u mnie na pozycji: %d", process_rank_to_delete, index);
         if (index == -1) {
             print1("Brak elementu z process rank: %d", process_rank_to_delete);
             pthread_mutex_unlock(&queue_lock_sanatoria);
@@ -529,7 +535,7 @@ int main() {
 
 
             for (int z = 0; z < world_size; z++) {
-                print1("wysyałam release na sanatorium, z: %d", z);
+//                print1("wysyałam release na sanatorium, z: %d", z);
                 pthread_mutex_lock(&lamport_lock);
                 lamport += 1;
                 pthread_mutex_unlock(&lamport_lock);
@@ -543,7 +549,7 @@ int main() {
                 }
             }
 
-            print("wysłałem releasy na sanatoria");
+//            print("wysłałem releasy na sanatoria");
 
             for (int z = 0; z < world_size; z++) {
 
@@ -559,7 +565,7 @@ int main() {
                 }
             }
 
-            print("wysłałem release na politykow");
+//            print("wysłałem release na politykow");
             //    print("koniec cyklu procesu");
         }
 
