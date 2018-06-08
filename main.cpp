@@ -177,7 +177,7 @@ void delete_from_queue(int process_rank_to_delete, int queue_identifier) {
             pthread_mutex_unlock(&queue_lock_sanatoria);
             return;
         } else {
-            sanatorium_queue.erase(politycy_queue.begin() + index);
+            sanatorium_queue.erase(sanatorium_queue.begin() + index);
         }
         pthread_mutex_unlock(&queue_lock_sanatoria);
     }
@@ -543,7 +543,7 @@ int main() {
                 }
             }
 
-            print("wysłałem release na sanatoria");
+            print("wysłałem releasy na sanatoria");
 
             for (int z = 0; z < world_size; z++) {
 
