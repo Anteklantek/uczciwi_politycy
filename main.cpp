@@ -58,8 +58,8 @@ void przed_printf() {
 
 void po_printf() {
     printf(" kolejka: [");
-    for (int i = 0; i < politycy_queue.size(); i++) {
-        printf("%d, ", politycy_queue.at(i).process_rank);
+    for (int i = 0; i < sanatorium_queue.size(); i++) {
+        printf("%d, ", sanatorium_queue.at(i).process_rank);
     }
     printf("] ");
 //    printf("starsza: [");
@@ -171,6 +171,7 @@ void delete_from_queue(int process_rank_to_delete, int queue_identifier) {
     } else if (queue_identifier == SANATORIA_MAIN_ID) {
         pthread_mutex_lock(&queue_lock_sanatoria);
         int index = get_index_of_given_process_rank(process_rank_to_delete, SANATORIA_MAIN_ID);
+        print1("usuwam z sanatorium queue: %d, jest u mnie na pozycji: %d", process_rank_to_delete, index);
         if (index == -1) {
             print1("Brak elementu z process rank: %d", process_rank_to_delete);
             pthread_mutex_unlock(&queue_lock_sanatoria);
