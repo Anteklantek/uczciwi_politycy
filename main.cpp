@@ -158,7 +158,7 @@ void *odbieraj(void *arg) {
                 starsza_politycy[dane_odbierane[0]] = 1;
                 pthread_mutex_unlock(&starsza_lock);
             }
-            print2("odebral ACK od proc %d, z lamportem %d", dane_odbierane[0], dane_odbierane[1]);
+//            print2("odebral ACK od proc %d, z lamportem %d", dane_odbierane[0], dane_odbierane[1]);
         } else if (dane_odbierane[2] == ZADANIE_ID) {
             struct queue_element received;
             if (dane_odbierane[1] > lamport_zadania_politycy) {
@@ -175,8 +175,8 @@ void *odbieraj(void *arg) {
             received.zapotrzebowanie = dane_odbierane[3];
             insert_into_queue(received);
 
-            print3("odebral żądanie od proc %d, z lamportem %d i zapotrzebowaniem %d", dane_odbierane[0],
-                   dane_odbierane[1], dane_odbierane[3]);
+//            print3("odebral żądanie od proc %d, z lamportem %d i zapotrzebowaniem %d", dane_odbierane[0],
+//                   dane_odbierane[1], dane_odbierane[3]);
 
             pthread_mutex_lock(&lamport_lock);
             lamport += 1;
@@ -186,14 +186,14 @@ void *odbieraj(void *arg) {
             int dane_wysylane[4] = {process_rank, lamport, ACKI_ID, -1};
             MPI_Send(&dane_wysylane, 4, MPI_INT, dane_odbierane[0], MAIN_CHANNEL, MPI_COMM_WORLD);
 
-            print2("wyslal ACK do proc %d z lamportem %d", dane_odbierane[0], dane_wysylane[1]);
+//            print2("wyslal ACK do proc %d z lamportem %d", dane_odbierane[0], dane_wysylane[1]);
 
         } else if (dane_odbierane[2] = RELEASE_ID) {
             pthread_mutex_lock(&lamport_lock);
             lamport = maxy(lamport, dane_odbierane[1]) + 1;
             pthread_mutex_unlock(&lamport_lock);
             delete_from_queue(dane_odbierane[0]);
-            print1("odebrał release od proc %d", dane_odbierane[0]);
+//            print1("odebrał release od proc %d", dane_odbierane[0]);
         }
     }
     pthread_exit(NULL);
@@ -262,14 +262,13 @@ int suma_zapotrzebowan_przede_mna() {
     int my_index = get_my_index_in_queue();
     if (my_index == -1) {
         //block entering by
-        printf("block entering");
         return LICZBA_POLITYKOW;
     } else {
         int sum = 0;
         for (int i = 0; i < my_index; i++) {
             sum += politycy_queue.at(i).zapotrzebowanie;
         }
-        print1("suma zapotrzebowania: %d", sum);
+//        print1("suma zapotrzebowania: %d", sum);
         return sum;
     }
 }
@@ -303,8 +302,8 @@ int main() {
                     insert_into_queue(elem);
                 } else {
                     MPI_Send(&dane_wysylane, 4, MPI_INT, i, MAIN_CHANNEL, MPI_COMM_WORLD);
-                    print3("wysłał żądanie do proc %d z lamportem %d, zapotrzebowanie %d", i, dane_wysylane[1],
-                           dane_wysylane[3]);
+//                    print3("wysłał żądanie do proc %d z lamportem %d, zapotrzebowanie %d", i, dane_wysylane[1],
+//                           dane_wysylane[3]);
                     pthread_mutex_lock(&lamport_lock);
                     lamport += 1;
                     pthread_mutex_unlock(&lamport_lock);
@@ -325,9 +324,15 @@ int main() {
                 sleep(1);
             }
 
-            sleep(4);
+            sleep(rand()%10);
 
             print("KONIEC SEKCJI KRYTYCZNEJ");
+
+
+
+
+
+
 
             for (int z = 0; z < world_size; z++) {
                 pthread_mutex_lock(&lamport_lock);
