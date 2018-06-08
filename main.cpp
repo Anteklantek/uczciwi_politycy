@@ -295,7 +295,7 @@ void *odbieraj(void *arg) {
                 lamport = maxy(lamport, dane_odbierane[1]) + 1;
                 pthread_mutex_unlock(&lamport_lock);
                 delete_from_queue(dane_odbierane[0], SANATORIA_MAIN_ID);
-//            print1("odebrał release od proc %d", dane_odbierane[0]);
+                print1("odebrał release od proc %d", dane_odbierane[0]);
             }
 
 
@@ -448,8 +448,9 @@ int main() {
             zapotrzebowanie_na_politykow = 7;//rand() % 5;
             //      print1("wylosowałem zapotrzebowanie na politykow: %d", zapotrzebowanie_na_politykow);
             lamport_zadania_politycy = lamport;
-            int dane_wysylane_politycy[5] = {process_rank, lamport_zadania_politycy, ZADANIE_ID, zapotrzebowanie_na_politykow,
-                                    POLITYCY_MAIN_ID};
+            int dane_wysylane_politycy[5] = {process_rank, lamport_zadania_politycy, ZADANIE_ID,
+                                             zapotrzebowanie_na_politykow,
+                                             POLITYCY_MAIN_ID};
 
             for (int i = 0; i < world_size; i++) {
                 if (i == process_rank) {
@@ -472,7 +473,8 @@ int main() {
             while (1) {
                 pthread_mutex_lock(&queue_lock_politycy);
                 if ((sumuj_tablice_politycy() == world_size - 1) &&
-                    (suma_zapotrzebowan_przede_mna(POLITYCY_MAIN_ID) + zapotrzebowanie_na_politykow <= LICZBA_POLITYKOW)) {
+                    (suma_zapotrzebowan_przede_mna(POLITYCY_MAIN_ID) + zapotrzebowanie_na_politykow <=
+                     LICZBA_POLITYKOW)) {
                     print("SEKCJA KRYTYCZNA, POLITYCY PRACUJĄ");
                     pthread_mutex_unlock(&queue_lock_politycy);
                     break;
@@ -486,8 +488,9 @@ int main() {
             print("KONIEC SEKCJI KRYTYCZNEJ, POLITYCY POTRZEBUJĄ SANATORIUM");
 
             lamport_zadania_sanatoria = lamport;
-            int dane_wysylane_sanatorium[5] = {process_rank, lamport_zadania_politycy, ZADANIE_ID, zapotrzebowanie_na_politykow,
-                                    SANATORIA_MAIN_ID};
+            int dane_wysylane_sanatorium[5] = {process_rank, lamport_zadania_politycy, ZADANIE_ID,
+                                               zapotrzebowanie_na_politykow,
+                                               SANATORIA_MAIN_ID};
 
             for (int i = 0; i < world_size; i++) {
                 if (i == process_rank) {
@@ -509,7 +512,8 @@ int main() {
             while (1) {
                 pthread_mutex_lock(&queue_lock_politycy);
                 if ((sumuj_tablice_sanatoria() == world_size - 1) &&
-                    (suma_zapotrzebowan_przede_mna(SANATORIA_MAIN_ID) + zapotrzebowanie_na_politykow <= POJEMNOSC_SANATORIUM)) {
+                    (suma_zapotrzebowan_przede_mna(SANATORIA_MAIN_ID) + zapotrzebowanie_na_politykow <=
+                     POJEMNOSC_SANATORIUM)) {
                     print("SEKCJA KRYTYCZNA, POLITYCY ODPOCZYWAJĄ W SANATORIUM");
                     pthread_mutex_unlock(&queue_lock_politycy);
                     break;
@@ -532,7 +536,8 @@ int main() {
                 if (process_rank == z) {
                     delete_from_queue(z, SANATORIA_MAIN_ID);
                 } else {
-                    int dane_wysylane_release_sanatorium[5] = {process_rank, lamport, RELEASE_ID, -1, SANATORIA_MAIN_ID};
+                    int dane_wysylane_release_sanatorium[5] = {process_rank, lamport, RELEASE_ID, -1,
+                                                               SANATORIA_MAIN_ID};
                     MPI_Send(&dane_wysylane_release_sanatorium, 5, MPI_INT, z, MAIN_CHANNEL, MPI_COMM_WORLD);
                 }
             }
