@@ -98,7 +98,7 @@ void print3(const char *text, int a, int b, int c) {
 }
 
 
-int get_index_of_given_process_rank(int process_rank);
+int get_index_of_given_process_rank(int process_rank, int queue_identifier);
 
 int get_position_to_insert(int insert_process_rank, int insert_lamport_clock, int queue_identifier) {
     if (queue_identifier == POLITYCY_MAIN_ID) {
@@ -294,7 +294,7 @@ void *odbieraj(void *arg) {
                 pthread_mutex_lock(&lamport_lock);
                 lamport = maxy(lamport, dane_odbierane[1]) + 1;
                 pthread_mutex_unlock(&lamport_lock);
-                delete_from_queue(dane_odbierane[0]);
+                delete_from_queue(dane_odbierane[0], SANATORIA_MAIN_ID);
 //            print1("odebrał release od proc %d", dane_odbierane[0]);
             }
 
@@ -448,7 +448,7 @@ int main() {
             zapotrzebowanie_na_politykow = 7;//rand() % 5;
             //      print1("wylosowałem zapotrzebowanie na politykow: %d", zapotrzebowanie_na_politykow);
             lamport_zadania_politycy = lamport;
-            int dane_wysylane[5] = {process_rank, lamport_zadania_politycy, ZADANIE_ID, zapotrzebowanie_na_politykow,
+            int dane_wysylane_politycy[5] = {process_rank, lamport_zadania_politycy, ZADANIE_ID, zapotrzebowanie_na_politykow,
                                     POLITYCY_MAIN_ID};
 
             for (int i = 0; i < world_size; i++) {
@@ -459,7 +459,7 @@ int main() {
                     elem.zapotrzebowanie = dane_wysylane[2];
                     insert_into_queue(elem, POLITYCY_MAIN_ID);
                 } else {
-                    MPI_Send(&dane_wysylane, 5, MPI_INT, i, MAIN_CHANNEL, MPI_COMM_WORLD);
+                    MPI_Send(&dane_wysylane_politycy, 5, MPI_INT, i, MAIN_CHANNEL, MPI_COMM_WORLD);
 //                    print3("wysłał żądanie o politykow do proc %d z lamportem %d, zapotrzebowanie %d", i, dane_wysylane[1],
 //                           dane_wysylane[3]);
                     pthread_mutex_lock(&lamport_lock);
@@ -486,7 +486,7 @@ int main() {
             print("KONIEC SEKCJI KRYTYCZNEJ, POLITYCY POTRZEBUJĄ SANATORIUM");
 
             lamport_zadania_sanatoria = lamport;
-            int dane_wysylane[5] = {process_rank, lamport_zadania_politycy, ZADANIE_ID, zapotrzebowanie_na_politykow,
+            int dane_wysylane_sanatorium[5] = {process_rank, lamport_zadania_politycy, ZADANIE_ID, zapotrzebowanie_na_politykow,
                                     SANATORIA_MAIN_ID};
 
             for (int i = 0; i < world_size; i++) {
@@ -497,7 +497,7 @@ int main() {
                     elem.zapotrzebowanie = dane_wysylane[2];
                     insert_into_queue(elem, SANATORIA_MAIN_ID);
                 } else {
-                    MPI_Send(&dane_wysylane, 5, MPI_INT, i, MAIN_CHANNEL, MPI_COMM_WORLD);
+                    MPI_Send(&dane_wysylane_sanatorium, 5, MPI_INT, i, MAIN_CHANNEL, MPI_COMM_WORLD);
 //                    print3("wysłał żądanie o sanatorium do proc %d z lamportem %d, zapotrzebowanie %d", i, dane_wysylane[1],
 //                           dane_wysylane[3]);
                     pthread_mutex_lock(&lamport_lock);

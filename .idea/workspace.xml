@@ -9,7 +9,7 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f9b19ab0-a575-403b-8f68-154c13cb758a" name="Default" comment="work change">
+    <list default="true" id="f9b19ab0-a575-403b-8f68-154c13cb758a" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
     </list>
@@ -35,8 +35,8 @@
       <file leaf-file-name="main.cpp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="797">
-              <caret line="551" column="13" selection-start-line="551" selection-start-column="13" selection-end-line="551" selection-end-column="13" />
+            <state relative-caret-position="329">
+              <caret line="100" column="35" selection-start-line="100" selection-start-column="35" selection-end-line="100" selection-end-column="35" />
             </state>
           </provider>
         </entry>
@@ -45,8 +45,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>koniec c</find>
-      <find>MPI_RECV</find>
       <find>CHANNEL</find>
       <find>ADD_TO_QUEUE</find>
       <find>ADD</find>
@@ -74,6 +72,8 @@
       <find>starsza_sanatorium</find>
       <find>lamport_zadania_sanatorium</find>
       <find>MPI_Send</find>
+      <find>delete_from_queue</find>
+      <find>get_index_of</find>
       <find>get_index_of_given_process_rank</find>
     </findStrings>
   </component>
@@ -176,7 +176,7 @@
       <workItem from="1528046220186" duration="2511000" />
       <workItem from="1528060129399" duration="4397000" />
       <workItem from="1528376602364" duration="14600000" />
-      <workItem from="1528439599913" duration="5064000" />
+      <workItem from="1528439599913" duration="6444000" />
     </task>
     <task id="LOCAL-00001" summary="Moze zadziala">
       <created>1528395004118</created>
@@ -388,11 +388,18 @@
       <option name="project" value="LOCAL" />
       <updated>1528440756106</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="added sanatorium">
+      <created>1528445182948</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1528445182948</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="46694000" />
+    <option name="totallyTimeSpent" value="48074000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1096" extended-state="6" />
@@ -456,7 +463,8 @@
     <MESSAGE value="fix compilation bugs" />
     <MESSAGE value="adding politicians limits" />
     <MESSAGE value="work change" />
-    <option name="LAST_COMMIT_MESSAGE" value="work change" />
+    <MESSAGE value="added sanatorium" />
+    <option name="LAST_COMMIT_MESSAGE" value="added sanatorium" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
@@ -626,8 +634,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/main.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="797">
-          <caret line="551" column="13" selection-start-line="551" selection-start-column="13" selection-end-line="551" selection-end-column="13" />
+        <state relative-caret-position="329">
+          <caret line="100" column="35" selection-start-line="100" selection-start-column="35" selection-end-line="100" selection-end-column="35" />
         </state>
       </provider>
     </entry>
