@@ -542,6 +542,7 @@ int main() {
                 }
             }
 
+            print("wysłałem release na sanatoria");
 
             for (int z = 0; z < world_size; z++) {
 
@@ -556,6 +557,8 @@ int main() {
                     MPI_Send(&dane_wysylane_release_politycy, 5, MPI_INT, z, MAIN_CHANNEL, MPI_COMM_WORLD);
                 }
             }
+
+            print("wysłałem release na politykow");
             //    print("koniec cyklu procesu");
         }
 
