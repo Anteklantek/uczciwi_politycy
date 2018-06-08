@@ -34,9 +34,12 @@ int maxy(int a, int b) {
 }
 
 int lamport;
-int *starsza_wiadomosc;
-int lamport_zadania;
-vector <queue_element> queue;
+int *starsza_politycy;
+int lamport_zadania_politycy;
+vector <queue_element> politycy_queue;
+int *starsza_sanatorium;
+int lamport_zadania_sanatorium;
+vector <queue_element> sanatorium_queue;
 int world_size;
 int process_rank;
 int zapotrzebowanie_na_politykow;
@@ -46,21 +49,21 @@ pthread_mutex_t lamport_lock, printf_lock, queue_lock, starsza_lock;
 
 void przed_printf() {
     pthread_mutex_lock(&printf_lock);
-    printf("(lamport: %d, lamport żądania: %d, proc: %d) ", lamport, lamport_zadania, process_rank);
+    printf("(lamport: %d, lamport żądania: %d, proc: %d) ", lamport, lamport_zadania_politycy, process_rank);
 }
 
 void po_printf() {
     printf(" kolejka: [");
-    for (int i = 0; i < queue.size(); i++) {
-        printf("%d, ", queue.at(i).process_rank);
+    for (int i = 0; i < politycy_queue.size(); i++) {
+        printf("%d, ", politycy_queue.at(i).process_rank);
     }
     printf("] ");
 
     printf("starsza: [");
     for (int i = 0; i < world_size - 1; i++) {
-        printf("%d, ", starsza_wiadomosc[i]);
+        printf("%d, ", starsza_politycy[i]);
     }
-    printf("%d] ", starsza_wiadomosc[world_size - 1]);
+    printf("%d] ", starsza_politycy[world_size - 1]);
     printf("\n");
     fflush(stdout);
     pthread_mutex_unlock(&printf_lock);
@@ -95,9 +98,9 @@ void print3(const char *text, int a, int b, int c) {
 int get_index_of_given_process_rank(int process_rank);
 
 int get_position_to_insert(int insert_process_rank, int insert_lamport_clock) {
-    for (int i = 0; i < queue.size(); i++) {
-        if (queue[i].lamport_clock > insert_lamport_clock ||
-            (queue[i].lamport_clock == insert_lamport_clock && queue[i].process_rank > insert_process_rank)) {
+    for (int i = 0; i < politycy_queue.size(); i++) {
+        if (politycy_queue[i].lamport_clock > insert_lamport_clock ||
+            (politycy_queue[i].lamport_clock == insert_lamport_clock && politycy_queue[i].process_rank > insert_process_rank)) {
             return i;
         }
     }
@@ -110,9 +113,9 @@ void insert_into_queue(struct queue_element element_to_insert) {
     int where = get_position_to_insert(element_to_insert.process_rank, element_to_insert.lamport_clock);
 
     if (where == -1) {
-        queue.push_back(element_to_insert);
+        politycy_queue.push_back(element_to_insert);
     } else {
-        queue.insert(queue.begin() + where, element_to_insert);
+        politycy_queue.insert(politycy_queue.begin() + where, element_to_insert);
     }
 
     pthread_mutex_unlock(&queue_lock);
@@ -126,14 +129,14 @@ void delete_from_queue(int process_rank_to_delete) {
         pthread_mutex_unlock(&queue_lock);
         return;
     } else {
-        queue.erase(queue.begin() + index);
+        politycy_queue.erase(politycy_queue.begin() + index);
     }
     pthread_mutex_unlock(&queue_lock);
 }
 
 int get_index_of_given_process_rank(int comparing_process_rank) {
-    for (int i = 0; i < queue.size(); i++) {
-        if (queue[i].process_rank == comparing_process_rank)
+    for (int i = 0; i < politycy_queue.size(); i++) {
+        if (politycy_queue[i].process_rank == comparing_process_rank)
             return i;
     }
     return -1;
@@ -150,17 +153,17 @@ void *odbieraj(void *arg) {
         MPI_Recv(&dane_odbierane, 4, MPI_INT, MPI_ANY_SOURCE, MAIN_CHANNEL, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
         if (dane_odbierane[2] == ACKI_ID) {
 
-            if (dane_odbierane[1] > lamport_zadania) {
+            if (dane_odbierane[1] > lamport_zadania_politycy) {
                 pthread_mutex_lock(&starsza_lock);
-                starsza_wiadomosc[dane_odbierane[0]] = 1;
+                starsza_politycy[dane_odbierane[0]] = 1;
                 pthread_mutex_unlock(&starsza_lock);
             }
             print2("odebral ACK od proc %d, z lamportem %d", dane_odbierane[0], dane_odbierane[1]);
         } else if (dane_odbierane[2] == ZADANIE_ID) {
             struct queue_element received;
-            if (dane_odbierane[1] > lamport_zadania) {
+            if (dane_odbierane[1] > lamport_zadania_politycy) {
                 pthread_mutex_lock(&starsza_lock);
-                starsza_wiadomosc[dane_odbierane[0]] = 1;
+                starsza_politycy[dane_odbierane[0]] = 1;
                 pthread_mutex_unlock(&starsza_lock);
             }
             pthread_mutex_lock(&lamport_lock);
@@ -214,10 +217,10 @@ int initialize() {
     MPI_Comm_size(MPI_COMM_WORLD, &world_size);
     //printf("World size is: %d\n",world_size);
 
-    starsza_wiadomosc = (int *) malloc(world_size * sizeof(int));
+    starsza_politycy = (int *) malloc(world_size * sizeof(int));
     pthread_mutex_lock(&starsza_lock);
     for (int i = 0; i < world_size; i++) {
-        starsza_wiadomosc[i] = 0;
+        starsza_politycy[i] = 0;
     }
     pthread_mutex_unlock(&starsza_lock);
 
@@ -245,8 +248,8 @@ int initialize() {
 }
 
 int get_my_index_in_queue() {
-    for (int i = 0; i < queue.size(); i++) {
-        if (queue.at(i).process_rank == process_rank) {
+    for (int i = 0; i < politycy_queue.size(); i++) {
+        if (politycy_queue.at(i).process_rank == process_rank) {
             return i;
         }
     }
@@ -264,7 +267,7 @@ int suma_zapotrzebowan_przede_mna() {
     } else {
         int sum = 0;
         for (int i = 0; i < my_index; i++) {
-            sum += queue.at(i).zapotrzebowanie;
+            sum += politycy_queue.at(i).zapotrzebowanie;
         }
         print1("suma zapotrzebowania: %d", sum);
         return sum;
@@ -282,14 +285,14 @@ int main() {
         while (1) {
             pthread_mutex_lock(&starsza_lock);
             for (int i = 0; i < world_size; i++) {
-                starsza_wiadomosc[i] = 0;
+                starsza_politycy[i] = 0;
             }
             pthread_mutex_unlock(&starsza_lock);
 //            print("wyzerowałem starsze");
             zapotrzebowanie_na_politykow = 7;//rand() % 5;
             //      print1("wylosowałem zapotrzebowanie na politykow: %d", zapotrzebowanie_na_politykow);
-            lamport_zadania = lamport;
-            int dane_wysylane[4] = {process_rank, lamport_zadania, ZADANIE_ID, zapotrzebowanie_na_politykow};
+            lamport_zadania_politycy = lamport;
+            int dane_wysylane[4] = {process_rank, lamport_zadania_politycy, ZADANIE_ID, zapotrzebowanie_na_politykow};
 
             for (int i = 0; i < world_size; i++) {
                 if (i == process_rank) {
@@ -311,7 +314,7 @@ int main() {
 
             while (1) {
                 pthread_mutex_lock(&queue_lock);
-                if ((sumuj_tablice(starsza_wiadomosc) == world_size - 1) &&
+                if ((sumuj_tablice(starsza_politycy) == world_size - 1) &&
                     (suma_zapotrzebowan_przede_mna() + zapotrzebowanie_na_politykow <= LICZBA_POLITYKOW)) {
                     print("SEKCJA KRYTYCZNA");
                     pthread_mutex_unlock(&queue_lock);
