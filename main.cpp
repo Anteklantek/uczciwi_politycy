@@ -171,7 +171,7 @@ void delete_from_queue(int process_rank_to_delete, int queue_identifier) {
     } else if (queue_identifier == SANATORIA_MAIN_ID) {
         pthread_mutex_lock(&queue_lock_sanatoria);
         int index = get_index_of_given_process_rank(process_rank_to_delete, SANATORIA_MAIN_ID);
-        print1("usuwam z sanatorium queue: %d, jest u mnie na pozycji: %d", process_rank_to_delete, index);
+        print2("usuwam z sanatorium queue: %d, jest u mnie na pozycji: %d", process_rank_to_delete, index);
         if (index == -1) {
             print1("Brak elementu z process rank: %d", process_rank_to_delete);
             pthread_mutex_unlock(&queue_lock_sanatoria);
