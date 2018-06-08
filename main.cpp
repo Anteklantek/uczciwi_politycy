@@ -285,7 +285,7 @@ void *odbieraj(void *arg) {
                 pthread_mutex_unlock(&lamport_lock);
 
                 //wyslij acka w odpowiedzi
-                int dane_wysylane[5] = {process_rank, lamport, ACKI_ID, -1, POLITYCY_MAIN_ID};
+                int dane_wysylane[5] = {process_rank, lamport, ACKI_ID, -1, SANATORIA_MAIN_ID};
                 MPI_Send(&dane_wysylane, 5, MPI_INT, dane_odbierane[0], MAIN_CHANNEL, MPI_COMM_WORLD);
 
 //            print2("wyslal ACK do proc %d z lamportem %d", dane_odbierane[0], dane_wysylane[1]);
@@ -530,12 +530,13 @@ int main() {
                 pthread_mutex_unlock(&lamport_lock);
 
                 if (process_rank == z) {
-                    delete_from_queue(z, POLITYCY_MAIN_ID);
+                    delete_from_queue(z, SANATORIA_MAIN_ID);
                 } else {
-                    int dane_wysylane[5] = {process_rank, lamport, RELEASE_ID, -1, POLITYCY_MAIN_ID};
-                    MPI_Send(&dane_wysylane, 5, MPI_INT, z, MAIN_CHANNEL, MPI_COMM_WORLD);
+                    int dane_wysylane_release_sanatorium[5] = {process_rank, lamport, RELEASE_ID, -1, SANATORIA_MAIN_ID};
+                    MPI_Send(&dane_wysylane_release_sanatorium, 5, MPI_INT, z, MAIN_CHANNEL, MPI_COMM_WORLD);
                 }
             }
+
 
             for (int z = 0; z < world_size; z++) {
 
@@ -546,8 +547,8 @@ int main() {
                 if (process_rank == z) {
                     delete_from_queue(z, POLITYCY_MAIN_ID);
                 } else {
-                    int dane_wysylane[5] = {process_rank, lamport, RELEASE_ID, -1, POLITYCY_MAIN_ID};
-                    MPI_Send(&dane_wysylane, 5, MPI_INT, z, MAIN_CHANNEL, MPI_COMM_WORLD);
+                    int dane_wysylane_release_politycy[5] = {process_rank, lamport, RELEASE_ID, -1, POLITYCY_MAIN_ID};
+                    MPI_Send(&dane_wysylane_release_politycy, 5, MPI_INT, z, MAIN_CHANNEL, MPI_COMM_WORLD);
                 }
             }
             //    print("koniec cyklu procesu");
