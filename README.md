@@ -1,6 +1,6 @@
 # uczciwi_politycy
 
-Projekt zaliczeniowy z laboratoriów z przedmiotu "Przetwarzanie rozproszone" prowadzonego przez Arkadiusza Danileckiego.
+Projekt zaliczeniowy z laboratoriów z przedmiotu "Przetwarzanie rozproszone" prowadzonych przez Arkadiusza Danileckiego.
 https://www.cs.put.poznan.pl/adanilecki/pr/projekty.shtml#politycy
 
 Treść zadania:
